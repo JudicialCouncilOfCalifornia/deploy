@@ -12,6 +12,3 @@ after_success:
 - eval $(aws ecr get-login --no-include-email --region us-west-2)
 - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
 - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
-- curl -fSL "https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip" -o terraform.zip
-- sudo unzip terraform.zip -d /opt/terraform
-- sudo ln -s /opt/terraform/terraform /usr/bin/terraform
