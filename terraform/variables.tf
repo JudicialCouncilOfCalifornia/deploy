@@ -3,13 +3,13 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
-variable "aws_account_id" {
-  description = "AWS account ID"
-}
+variable "access_key" {}
+
+variable "secret_key" {}
 
 variable "az_count" {
   description = "Number of AZs to cover in a given AWS region"
-  default     = "1"
+  default     = "2"
 }
 
 variable "app_image" {
@@ -34,5 +34,10 @@ variable "fargate_cpu" {
 
 variable "fargate_memory" {
   description = "Fargate instance memory to provision (in MiB)"
-  default     = "1024"
+  default     = "2048"
+}
+
+variable "fargate_arn" {
+  description = "Fargate execution role"
+  default     = "arn:aws:iam::617580300246:role/ecsTaskExecutionRole"
 }

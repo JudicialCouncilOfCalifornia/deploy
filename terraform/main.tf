@@ -1,14 +1,8 @@
 # Specify the provider and access details
 
-# We use vault to get credentials, but you can use variables to achieve the same thing
-data "vault_generic_secret" "aws_creds" {
-  path = "aws/sts/manage-${var.aws_account_id}"
-}
-
 provider "aws" {
-  access_key = "${data.vault_generic_secret.aws_creds.data["access_key"]}"
-  secret_key = "${data.vault_generic_secret.aws_creds.data["secret_key"]}"
-  token      = "${data.vault_generic_secret.aws_creds.data["security_token"]}"
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
   region     = "${var.aws_region}"
 }
 
@@ -70,7 +64,7 @@ resource "aws_route_table" "private" {
   vpc_id = "${aws_vpc.main.id}"
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = "${element(aws_nat_gateway.gw.*.id, count.index)}"
   }
 }
@@ -99,9 +93,9 @@ resource "aws_security_group" "lb" {
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -167,6 +161,7 @@ resource "aws_ecs_task_definition" "app" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "${var.fargate_cpu}"
   memory                   = "${var.fargate_memory}"
+  execution_role_arn       = "${var.fargate_arn}"
 
   container_definitions = <<DEFINITION
 [
