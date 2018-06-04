@@ -24,7 +24,7 @@ variable "app_port" {
 
 variable "app_count" {
   description = "Number of docker containers to run"
-  default     = 1
+  default     = 2
 }
 
 variable "fargate_cpu" {
