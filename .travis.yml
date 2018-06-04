@@ -9,6 +9,6 @@ script:
 after_success:
   - pip install awscli
   - export PATH=$PATH:$HOME/.local/bin
-  - eval $(aws ecr get-login --region us-east-1) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-  - docker tag docassemble:latest [your_ecr_account].dkr.ecr.us-east-1.amazonaws.com/my_example_app:latest
-  - docker push [your_ecr_account].dkr.ecr.us-east-1.amazonaws.com/my_example_app:latest
+  - eval $(aws ecr get-login --no-include-email --region us-west-2) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
+  - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
+  - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
