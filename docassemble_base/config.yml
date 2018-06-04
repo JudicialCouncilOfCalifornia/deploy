@@ -57,7 +57,7 @@ azure:
   account name: example-com
   account key: 1TGSCr2P2uSw9/CLoucfNIAEFcqakAC7kiVwJsKLX65X3yugWwnNFRgQRfRHtenGVcc5KujusYUNnXXGXruDCA==
   container: yourcontainername
-ec2: False
+ec2: True
 log server: Null
 use https: False
 use lets encrypt: False
