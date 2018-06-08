@@ -5,6 +5,42 @@ body.dabody {
     /* font-size: 16px; */
 }
 
+.configform .CodeMirror {
+    height: 75vh;
+}
+
+.pgmain {
+    height: 75vh;
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+}
+
+.pgright {
+    height: 75vh;
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+}
+
+.pgmain .pgform {
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.pgmain .pgform .CodeMirror {
+    flex: 1;
+    overflow: hidden;
+}
+
+.pgright .playgroundbox {
+    flex: 1;
+    overflow: hidden;
+}
+
 body.dasignature {
     border: 0px;
     margin: 0px;
@@ -230,6 +266,10 @@ a.sourceactive {
 a.backbuttoncolor:hover, 
 a.backbuttoncolor:focus {
     text-decoration: none;
+}
+
+.backbuttoncolor {
+    -webkit-appearance: none;
 }
 
 /* .backbuttoncolor { */
