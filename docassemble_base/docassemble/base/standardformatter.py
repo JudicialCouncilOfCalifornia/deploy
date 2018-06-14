@@ -40,7 +40,7 @@ def tracker_tag(status):
 
 def datatype_tag(datatypes):
     if len(datatypes):
-        return('                <input type="hidden" name="_datatypes" value=' + myb64doublequote(json.dumps(datatypes)) + '/>\n')
+        return('                <input type="hidden" name="_datatypes" value=' + myb64doublequote(json.dumps(datatypes)) + '/>\n                <input type="hidden" name="_visible" value=""/>\n')
     return ('')
 
 def varname_tag(varnames):
@@ -708,6 +708,7 @@ def as_html(status, url_for, debug, root, validation_rules, field_error, the_pro
             output += '                <div>\n' + markdown_to_html(status.subquestionText, status=status, indent=18) + '                </div>\n'
         if video_text:
             output += indent_by(video_text, 12)
+        fieldlist.append('                <input type="hidden" name="_event" value=' + myb64doublequote(json.dumps(list(status.question.fields_used))) + ' />\n')
         if (len(fieldlist)):
             output += "".join(fieldlist)
         if status.continueLabel:
@@ -812,15 +813,15 @@ def as_html(status, url_for, debug, root, validation_rules, field_error, the_pro
                     if hasattr(field, 'choicetype'):
                         vals = set([unicode(x['key']) for x in status.selectcompute[field.number]])
                         if len(vals) == 1 and ('True' in vals or 'False' in vals):
-                            datatypes[field.saveas] = 'yesno'
+                            datatypes[field.saveas] = 'boolean'
                         elif len(vals) == 1 and 'None' in vals:
-                            datatypes[field.saveas] = 'yesnomaybe'
+                            datatypes[field.saveas] = 'threestate'
                         elif len(vals) == 2 and ('True' in vals and 'False' in vals):
-                            datatypes[field.saveas] = 'yesno'
+                            datatypes[field.saveas] = 'boolean'
                         elif len(vals) == 2 and (('True' in vals and 'None' in vals) or ('False' in vals and 'None' in vals)):
-                            datatypes[field.saveas] = 'yesnomaybe'
+                            datatypes[field.saveas] = 'threestate'
                         elif len(vals) == 3 and ('True' in vals and 'False' in vals and 'None' in vals):
-                            datatypes[field.saveas] = 'yesnomaybe'
+                            datatypes[field.saveas] = 'threestate'
                         else:
                             datatypes[field.saveas] = field.datatype
                     else:
@@ -964,11 +965,13 @@ def as_html(status, url_for, debug, root, validation_rules, field_error, the_pro
                     validation_rules['messages'][field.saveas]['required'] = word("You must provide a file.")
                 if field.datatype == 'combobox':
                     validation_rules['ignore'] = list()
-                if field.datatype in ['boolean', 'threestate']:
+                if field.datatype == 'boolean':
                     if field.sign > 0:
                         checkboxes[field.saveas] = 'False'
                     else:
                         checkboxes[field.saveas] = 'True'
+                elif field.datatype == 'threestate':
+                    checkboxes[field.saveas] = 'None'
                 elif field.datatype in ['checkboxes', 'object_checkboxes']:
                     if field.choicetype in ['compute', 'manual']:
                         pairlist = list(status.selectcompute[field.number])
@@ -979,15 +982,19 @@ def as_html(status, url_for, debug, root, validation_rules, field_error, the_pro
                     for pair in pairlist:
                         if pair['key'] is not None:
                             checkboxes[safeid(from_safeid(field.saveas) + "[" + myb64quote(pair['key']) + "]")] = 'False'
+                elif not status.extras['required'][field.number]:
+                    checkboxes[field.saveas] = 'None'
             if hasattr(field, 'saveas') and field.saveas in status.embedded:
                 continue
             if hasattr(field, 'label'):
                 if status.labels[field.number] == 'no label':
-                    fieldlist.append('                <div class="form-group row' + req_tag + '"><div class="col-md-12">' + input_for(status, field, wide=True) + '</div></div>\n')
+                    fieldlist.append('                <div class="form-group row' + req_tag + '"><div class="col widecol">' + input_for(status, field, wide=True) + '</div></div>\n')
                 elif hasattr(field, 'inputtype') and field.inputtype in ['yesnowide', 'noyeswide']:
-                    fieldlist.append('                <div class="form-group row yesnospacing"><div class="col-md-12">' + input_for(status, field) + '</div></div>\n')
+                    fieldlist.append('                <div class="form-group row yesnospacing"><div class="col widecol">' + input_for(status, field) + '</div></div>\n')
                 elif hasattr(field, 'inputtype') and field.inputtype in ['yesno', 'noyes']:
                     fieldlist.append('                <div class="form-group row yesnospacing' + req_tag +'"><div class="offset-md-4 col-md-8">' + input_for(status, field) + '</div></div>\n')
+                elif status.labels[field.number] == '':
+                    fieldlist.append('                <div class="form-group row' + req_tag + '"><div class="offset-md-4 col-md-8 fieldpart nolabel">' + input_for(status, field) + '</div></div>\n')
                 else:
                     fieldlist.append('                <div class="form-group row' + req_tag + '"><label for="' + escape_id(label_saveas) + '" class="col-md-4 col-form-label datext-right">' + helptext_start + markdown_to_html(status.labels[field.number], trim=True, status=status, strip_newlines=True) + helptext_end + '</label><div class="col-md-8 fieldpart">' + input_for(status, field) + '</div></div>\n')
             if hasattr(field, 'extras') and 'show_if_var' in field.extras and 'show_if_val' in status.extras:
