@@ -6,9 +6,6 @@ jobs:
   - stage: Build
     script:
     - docker build -t docassemble .
-  - stage: Deploy
-    if: type = push AND branch = master
-    script:
     - pip install awscli
     - export PATH=$PATH:$HOME/.local/bin
     - eval $(aws ecr get-login --no-include-email --region us-west-2)
