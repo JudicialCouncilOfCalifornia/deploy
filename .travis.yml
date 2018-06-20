@@ -13,7 +13,7 @@ jobs:
   - stage: Build base
     if: type = api
     script:
-    - docker build -t docassemble-base .
+    - cd base && docker build -t docassemble-base .
     - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
   - stage: Build application
