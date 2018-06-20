@@ -7,6 +7,7 @@ RUN apt -y autoremove
 RUN mkdir -p /etc/ssl/docassemble /usr/share/docassemble/local /usr/share/docassemble/certs /usr/share/docassemble/backup /usr/share/docassemble/config /usr/share/docassemble/webapp /usr/share/docassemble/files /var/www/.pip /var/www/.cache /usr/share/docassemble/log /tmp/docassemble /var/www/html/log && chown -R www-data.www-data /var/www && chsh -s /bin/bash www-data && update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10 && wget -qO- https://deb.nodesource.com/setup_8.x | bash - && apt-get -y install nodejs && npm install -g azure-storage-cmd
 RUN cd /usr/share/docassemble && git clone https://github.com/letsencrypt/letsencrypt
 RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf && echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
+RUN easy_install pip && pip install --upgrade virtualenv
 EXPOSE 80 443 9001 514 25 465 8080 8081 5432 6379 4369 5671 5672 25672
 ENV CONTAINERROLE="all" LOCALE="en_US.UTF-8 UTF-8" TIMEZONE="America/New_York" EC2="" S3ENABLE="" S3BUCKET="" S3ACCESSKEY="" S3SECRETACCESSKEY="" DAHOSTNAME="" USEHTTPS="" USELETSENCRYPT="" LETSENCRYPTEMAIL="" DBHOST="" LOGSERVER="" REDIS="" RABBITMQ=""
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
