@@ -1,13 +1,13 @@
+env:
+  global:
+  - PATH=$PATH:$HOME/.local/bin
 language: python
 services:
 - docker
-install: skip
 script:
 - cd tests && ./testparallel.sh
 - docker build -t docassemble .
 before_deploy:
-- pip install awscli
-- export PATH=$PATH:$HOME/.local/bin
 - eval $(aws ecr get-login --no-include-email --region us-west-2)
 - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
 deploy:
