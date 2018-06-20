@@ -1,13 +1,16 @@
 language: python
 services:
 - docker
-jobs:
-  include:
-  - stage: Build
-    script:
-    - docker build -t docassemble .
-    - pip install awscli
-    - export PATH=$PATH:$HOME/.local/bin
-    - eval $(aws ecr get-login --no-include-email --region us-west-2)
-    - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
-    - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
+install: skip
+script:
+- docker build -t docassemble .
+before_deploy:
+- pip install awscli
+- export PATH=$PATH:$HOME/.local/bin
+- eval $(aws ecr get-login --no-include-email --region us-west-2)
+- docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
+deploy:
+  provider: script
+  script: docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
+  on:
+    branch: master
