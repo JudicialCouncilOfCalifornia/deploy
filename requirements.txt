@@ -1,2 +1,4 @@
 awscli
 lettuce
+python-Levenshtein
+lettuce_webdriver
