@@ -4,8 +4,6 @@ env:
 language: python
 services:
 - docker
-addons:
-  chrome: stable
 script:
 - cd tests && ./testparallel.sh
 - docker build -t docassemble .
