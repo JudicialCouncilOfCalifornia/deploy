@@ -3,6 +3,7 @@ services:
 - docker
 install: skip
 script:
+- cd test && ./testparallel.sh
 - docker build -t docassemble .
 before_deploy:
 - pip install awscli
