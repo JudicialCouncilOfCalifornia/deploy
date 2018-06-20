@@ -10,7 +10,7 @@ script:
 - docker build -t docassemble .
 - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
 - docker run -d -p 80:80 docassemble:latest
-- cd tests && ./testparallel.sh
+- cd tests && lettuce features/Demo.feature && lettuce features/TestExamples.feature
 before_deploy:
 - eval $(aws ecr get-login --no-include-email --region us-west-2)
 deploy:
