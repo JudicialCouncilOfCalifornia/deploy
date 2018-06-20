@@ -11,7 +11,6 @@ before_script:
 jobs:
   include:
   - stage: Build base
-    if: type = api
     script:
     - cd base && docker build -t docassemble-base .
     - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
