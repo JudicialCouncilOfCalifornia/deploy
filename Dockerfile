@@ -6,3 +6,6 @@ USER www-data
 RUN pip install /tmp/docassemble/docassemble /tmp/docassemble/docassemble_base /tmp/docassemble/docassemble_demo /tmp/docassemble/docassemble_webapp
 USER root
 RUN rm -rf /tmp/docassemble
+EXPOSE 80 443 9001 514 25 465 8080 8081 5432 6379 4369 5671 5672 25672
+ENV CONTAINERROLE="all" LOCALE="en_US.UTF-8 UTF-8" TIMEZONE="America/New_York" EC2="" S3ENABLE="" S3BUCKET="" S3ACCESSKEY="" S3SECRETACCESSKEY="" DAHOSTNAME="" USEHTTPS="" USELETSENCRYPT="" LETSENCRYPTEMAIL="" DBHOST="" LOGSERVER="" REDIS="" RABBITMQ=""
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
