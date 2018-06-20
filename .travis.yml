@@ -1,6 +1,7 @@
 language: python
 services:
 - docker
+install: skip
 script:
 - docker build -t docassemble .
 - pip install awscli
