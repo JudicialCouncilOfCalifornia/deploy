@@ -4,6 +4,8 @@ env:
 language: python
 services:
 - docker
+addons:
+  chrome: stable
 script:
 - docker build -t docassemble .
 - docker tag docassemble:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble:latest
