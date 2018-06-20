@@ -4,6 +4,7 @@ services:
 install: skip
 script:
 - docker build -t docassemble .
+before_deploy:
 - pip install awscli
 - export PATH=$PATH:$HOME/.local/bin
 - eval $(aws ecr get-login --no-include-email --region us-west-2)
