@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
 SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND="noninteractive" TERM="xterm"
 RUN apt-get -y update
