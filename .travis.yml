@@ -22,7 +22,6 @@ jobs:
     - docker build -t docassemble-server:$TRAVIS_BRANCH .
     - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
     - docker run -d -p 80:80 docassemble-server:$TRAVIS_BRANCH
-    - lettuce tests/features/TestExamples.feature
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
   - stage: Build application
     if: type = pull_request
