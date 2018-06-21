@@ -17,7 +17,7 @@ jobs:
     - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
   - stage: Build application
-    if: type != api
+    if: type = push
     script:
     - docker build -t docassemble-server:$TRAVIS_BRANCH .
     - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
