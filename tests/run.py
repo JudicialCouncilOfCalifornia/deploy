@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+import os
 
 pool = Pool()
 total_tests = 0
@@ -10,4 +11,5 @@ pool.close()
 pool.join()
 
 def test_feature(feature_idx):
+  os.system("lettuce --verbosity 1 -s "+feature_idx)
   print (feature_idx)
