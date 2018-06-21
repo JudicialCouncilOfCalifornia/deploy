@@ -13,13 +13,13 @@ jobs:
   - stage: Build base
     if: type = api
     script:
-    - cd base && docker build -t docassemble-base .
+    - cd base && docker build -t docassemble-base:latest .
     - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
   - stage: Build application
     if: type != api
     script:
-    - docker build -t docassemble-server .
+    - docker build -t docassemble-server:$TRAVIS_BRANCH .
     - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
     - docker run -d -p 80:80 docassemble-server:$TRAVIS_BRANCH
     - lettuce tests/features/TestExamples.feature
