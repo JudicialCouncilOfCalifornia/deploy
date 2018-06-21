@@ -9,8 +9,7 @@ from selenium.webdriver import ChromeOptions, Chrome
 import time
 
 default_path = "http://localhost"
-#default_path = "https://demo.docassemble.org"
-default_wait_seconds = 0
+default_wait_seconds = 3
 use_firefox = False
 use_phantomjs = False
 use_headless_chrome = True
