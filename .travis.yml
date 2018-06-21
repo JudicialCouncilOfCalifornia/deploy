@@ -23,6 +23,7 @@ jobs:
     - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
     - docker run -d -p 80:80 docassemble-server:$TRAVIS_BRANCH
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py
   - stage: Build application
     if: type = pull_request
     script: skip
