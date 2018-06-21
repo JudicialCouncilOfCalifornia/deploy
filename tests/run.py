@@ -8,12 +8,12 @@ def test_feature(feature_idx):
 
 print("<<START>>")
 pool = Pool()
-total_tests = 0
+feature_idx = 0
 for line in open("tests/features/TestExamples.feature"):
   if line.startswith("  Scenario:"):
-    total_tests += 1
+    feature_idx += 1
     print("\tQueued: "+feature_idx)
-    pool.apply_async(test_feature, (total_tests, ))
+    pool.apply_async(test_feature, (feature_idx, ))
 pool.close()
 pool.join()
 print("<<END>>")
