@@ -7,4 +7,4 @@ RUN apt -y autoremove
 RUN mkdir -p /etc/ssl/docassemble /usr/share/docassemble/local /usr/share/docassemble/certs /usr/share/docassemble/backup /usr/share/docassemble/config /usr/share/docassemble/webapp /usr/share/docassemble/files /var/www/.pip /var/www/.cache /usr/share/docassemble/log /tmp/docassemble /var/www/html/log && chown -R www-data.www-data /var/www && chsh -s /bin/bash www-data && update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10 && wget -qO- https://deb.nodesource.com/setup_8.x | bash - && apt-get -y install nodejs && npm install -g azure-storage-cmd
 RUN cd /usr/share/docassemble && git clone https://github.com/letsencrypt/letsencrypt
 RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf && echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
-RUN easy_install pip && pip install --upgrade virtualenv pip bcrypt flask flask-login flask-mail flask-sqlalchemy flask-wtf distutils2 passlib pycryptodome 3to2 'git+https://github.com/nekstrom/pyrtf-ng#egg=pyrtf-ng' simplekv
+RUN easy_install pip && pip install --upgrade virtualenv pip
