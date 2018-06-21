@@ -11,11 +11,13 @@ before_script:
 jobs:
   include:
   - stage: Build base
+    if: type = api
     script:
     - cd base && docker build -t docassemble-base .
     - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
     - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
   - stage: Build application
+    if: type != api
     script:
     - docker build -t docassemble-server .
     - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
