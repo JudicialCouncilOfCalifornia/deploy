@@ -1,9 +1,10 @@
+from __future__ import print_function
 from multiprocessing import Pool
 import os
 
 def test_feature(feature_idx):
   os.system("lettuce --verbosity 1 -s "+feature_idx)
-  print (feature_idx)
+  print(feature_idx)
 
 pool = Pool()
 total_tests = 0
