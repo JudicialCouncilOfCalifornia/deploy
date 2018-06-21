@@ -6,6 +6,7 @@ def test_feature(feature_idx):
   os.system("lettuce --verbosity 1 -s "+feature_idx)
   print(feature_idx)
 
+print("<<START>>")
 pool = Pool()
 total_tests = 0
 for line in open("tests/features/TestExamples.feature"):
@@ -14,3 +15,4 @@ for line in open("tests/features/TestExamples.feature"):
     pool.apply_async(test_feature, (total_tests, ))
 pool.close()
 pool.join()
+print("<<END>>")
