@@ -7,11 +7,14 @@ def retry_feature(feature_idx):
   os.system("lettuce --verbosity 1 -s " + str(feature_idx + 1) + " tests/features/TestExamples.feature")
 
 def test_feature(feature_idx):
-  try:
-    retry_feature(feature_idx)
-  except:
-    retry_feature(feature_idx)
-  print("\tDone: "+ str(feature_idx + 1))
+  for x in range(3):
+    try:
+      retry_feature(feature_idx)
+    except:
+      print("\tFailed: "+ str(feature_idx + 1))
+    else:
+      print("\tSuccess: "+ str(feature_idx + 1))
+      return
 
 print("<<START>>")
 pool = Pool()
