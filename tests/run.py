@@ -11,6 +11,7 @@ def test_feature(feature_idx):
     try:
       retry_feature(feature_idx)
     except:
+      print sys.exc_info()[0]
       print("\tFailed: "+ str(feature_idx + 1))
     else:
       print("\tSuccess: "+ str(feature_idx + 1))
