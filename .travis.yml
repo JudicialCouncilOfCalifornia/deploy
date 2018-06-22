@@ -36,17 +36,17 @@ jobs:
     if: type = push
     script:
     - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - python tests/run.py
+    - python tests/run.py 201 300
   - stage: Test application
     if: type = push
     script:
     - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - python tests/run.py
+    - python tests/run.py 301 400
   - stage: Test application
     if: type = push
     script:
     - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - python tests/run.py
+    - python tests/run.py 401 500
   - stage: Test application
     if: type = push
     script:
