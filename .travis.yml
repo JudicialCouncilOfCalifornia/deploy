@@ -26,4 +26,34 @@ jobs:
     if: type = push
     script:
     - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py 1 100
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py 101 200
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - python tests/run.py
+  - stage: Test application
+    if: type = push
+    script:
+    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
     - python tests/run.py
