@@ -53,11 +53,10 @@ voicerss:
     es: mx
     fr: fr
 s3:
-  enable: True
-  access key id: $AWS_ACCESS_KEY_ID
-  secret access key: $AWS_SECRET_ACCESS_KEY
-  bucket: docassemble
-  region: $AWS_DEFAULT_REGION
+  enable: False
+  access key id: FWIEJFIJIDGISEJFWOEF
+  secret access key: RGERG34eeeg3agwetTR0+wewWAWEFererNRERERG
+  bucket: yourbucketname
 azure:
   enable: False
   account name: example-com
