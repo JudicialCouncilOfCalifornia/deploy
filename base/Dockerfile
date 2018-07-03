@@ -10,4 +10,4 @@ RUN chsh -s /bin/bash www-data
 RUN npm install -g azure-storage-cmd
 RUN cd /usr/share/docassemble && git clone https://github.com/letsencrypt/letsencrypt
 RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf && echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
-RUN easy_install pip && pip install --upgrade virtualenv pip 3to2
+RUN easy_install pip && pip install --upgrade virtualenv pip 3to2 pdfx
