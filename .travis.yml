@@ -1,4 +1,5 @@
 language: python
+services: docker
 env:
 - START=101 END=201
 - START=201 END=301
@@ -21,7 +22,6 @@ stages:
 jobs:
   include:
   - stage: build
-    services: docker
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
     - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
