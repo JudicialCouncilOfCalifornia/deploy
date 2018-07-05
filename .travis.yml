@@ -53,24 +53,32 @@ jobs:
     - sleep 5m
     - python tests/run.py 501 601
   - stage: Test
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - sleep 5m
     - python tests/run.py 601 701
   - stage: Test
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - sleep 5m
     - python tests/run.py 701 801
   - stage: Test
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - sleep 5m
     - python tests/run.py 801 901
   - stage: Test
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
