@@ -27,8 +27,8 @@ env:
 - START=501 END=800
 - START=601 END=850
 - START=701 END=900
-- START=801 END=950
-- START=901 END=1000
+- START=900 END=950
+- START=950 END=1000
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli
