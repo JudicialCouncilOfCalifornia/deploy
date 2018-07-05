@@ -16,10 +16,10 @@ jobs:
     - docker build -t docassemble:$TRAVIS_BRANCH .
     - docker tag docassemble:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
     - docker push 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
-  - stage: Test application
+  - stage: Test
     if: type = push
     script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - sleep 1m
     - python tests/run.py 1 101
   - stage: Test application
