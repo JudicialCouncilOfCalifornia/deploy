@@ -1,6 +1,5 @@
 language: python
 env:
-- START=1 END=101
 - START=101 END=201
 - START=201 END=301
 - START=301 END=401
