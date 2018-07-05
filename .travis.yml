@@ -11,6 +11,8 @@ before_script:
 jobs:
   include:
   - stage: Build
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
