@@ -4,21 +4,19 @@ env:
 language: python
 services:
 - docker
-addons:
-  chrome: stable
 before_script:
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
   include:
   - stage: Build
-    addons:
-      chrome: stable
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
     - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
     - docker push $REPO_URL:$TRAVIS_BRANCH
   - stage: Test
+    addons:
+      chrome: stable
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
