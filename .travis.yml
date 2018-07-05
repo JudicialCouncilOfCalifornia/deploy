@@ -13,9 +13,9 @@ jobs:
   - stage: Build application
     if: type = push
     script:
-    - docker build -t docassemble-server:$TRAVIS_BRANCH .
-    - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
+    - docker build -t docassemble:$TRAVIS_BRANCH .
+    - docker tag docassemble:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
+    - docker push 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
   - stage: Test application
     if: type = push
     script:
