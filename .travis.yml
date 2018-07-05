@@ -1,15 +1,4 @@
 language: python
-env:
-- START=1 END=101
-- START=101 END=201
-- START=201 END=301
-- START=301 END=401
-- START=401 END=501
-- START=501 END=601
-- START=601 END=701
-- START=701 END=801
-- START=801 END=901
-- START=901 END=1001
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
@@ -27,6 +16,17 @@ jobs:
   - stage: Test
     addons:
       chrome: stable
+    env:
+    - START=1 END=101
+    - START=101 END=201
+    - START=201 END=301
+    - START=301 END=401
+    - START=401 END=501
+    - START=501 END=601
+    - START=601 END=701
+    - START=701 END=801
+    - START=801 END=901
+    - START=901 END=1001
     if: type = push
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
