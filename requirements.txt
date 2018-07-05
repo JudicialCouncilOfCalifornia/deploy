@@ -1,5 +1,0 @@
-awscli
-chromedriver_installer
-lettuce
-lettuce_webdriver
-python-Levenshtein

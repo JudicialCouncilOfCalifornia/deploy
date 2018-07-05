@@ -1,66 +1,36 @@
-env:
-  global:
-  - PATH=$PATH:$HOME/.local/bin
 language: python
 services:
 - docker
 addons:
   chrome: stable
+stages:
+- name: build
+  if: type = push
+- name: test
+  if: type = push
+env:
+- START=1 END=101
+- START=101 END=201
+- START=201 END=301
+- START=301 END=401
+- START=401 END=501
+- START=501 END=601
+- START=601 END=701
+- START=701 END=801
+- START=801 END=901
+- START=901 END=1001
 before_script:
-- eval $(aws ecr get-login --no-include-email --region us-west-2)
+- export PATH=$PATH:$HOME/.local/bin
+- pip install awscli
+- eval $(aws ecr get-login --no-include-email --region us-east-1)
+script:
+- docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
+- pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
+- python tests/run.py $START $END
 jobs:
   include:
-  - stage: Build base
-    if: type = api
+  - stage: build
     script:
-    - cd base && docker build -t docassemble-base:latest .
-    - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
-    - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
-  - stage: Build application
-    if: type = push
-    script:
-    - docker build -t docassemble-server:$TRAVIS_BRANCH .
-    - docker tag docassemble-server:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 1 101
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 101 201
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 201 301
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 301 401
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 401 501
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 501 601
-  - stage: Test application
-    if: type = push
-    script:
-    - docker run -d -p 80:80 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-server:$TRAVIS_BRANCH
-    - sleep 1m
-    - python tests/run.py 601 701
+    - docker build -t docassemble:$TRAVIS_BRANCH .
+    - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
+    - docker push $REPO_URL:$TRAVIS_BRANCH

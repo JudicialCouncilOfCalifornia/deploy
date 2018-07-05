@@ -1,4 +1,19 @@
-FROM 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
+FROM debian:stretch
+RUN apt-get -q -y update
+RUN apt-get -q -y install curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get -q -y upgrade
+RUN apt-get -q -y install apt-utils tzdata python python-dev python-setuptools wget unzip git locales pandoc texlive texlive-latex-extra texlive-font-utils texlive-extra-utils apache2 postgresql libapache2-mod-wsgi libapache2-mod-xsendfile poppler-utils libffi-dev libffi6 imagemagick gcc supervisor libaudio-flac-header-perl libaudio-musepack-perl libmp3-tag-perl libogg-vorbis-header-pureperl-perl make perl libvorbis-dev libcddb-perl libinline-perl libcddb-get-perl libmp3-tag-perl libaudio-scan-perl libaudio-flac-header-perl libparallel-forkmanager-perl libav-tools autoconf automake libjpeg-dev zlib1g-dev libpq-dev logrotate cron pdftk libxml2 libxslt1.1 libxml2-dev libxslt1-dev libcurl4-openssl-dev libssl-dev redis-server rabbitmq-server libreoffice libtool libtool-bin pacpl syslog-ng rsync s3cmd mktemp dnsutils tesseract-ocr tesseract-ocr-dev tesseract-ocr-afr tesseract-ocr-ara tesseract-ocr-aze tesseract-ocr-bel tesseract-ocr-ben tesseract-ocr-bul tesseract-ocr-cat tesseract-ocr-ces tesseract-ocr-chi-sim tesseract-ocr-chi-tra tesseract-ocr-chr tesseract-ocr-dan tesseract-ocr-deu tesseract-ocr-deu-frak tesseract-ocr-ell tesseract-ocr-eng tesseract-ocr-enm tesseract-ocr-epo tesseract-ocr-equ tesseract-ocr-est tesseract-ocr-eus tesseract-ocr-fin tesseract-ocr-fra tesseract-ocr-frk tesseract-ocr-frm tesseract-ocr-glg tesseract-ocr-grc tesseract-ocr-heb tesseract-ocr-hin tesseract-ocr-hrv tesseract-ocr-hun tesseract-ocr-ind tesseract-ocr-isl tesseract-ocr-ita tesseract-ocr-ita-old tesseract-ocr-jpn tesseract-ocr-kan tesseract-ocr-kor tesseract-ocr-lav tesseract-ocr-lit tesseract-ocr-mal tesseract-ocr-mkd tesseract-ocr-mlt tesseract-ocr-msa tesseract-ocr-nld tesseract-ocr-nor tesseract-ocr-osd tesseract-ocr-pol tesseract-ocr-por tesseract-ocr-ron tesseract-ocr-rus tesseract-ocr-slk tesseract-ocr-slk-frak tesseract-ocr-slv tesseract-ocr-spa tesseract-ocr-spa-old tesseract-ocr-sqi tesseract-ocr-srp tesseract-ocr-swa tesseract-ocr-swe tesseract-ocr-tam tesseract-ocr-tel tesseract-ocr-tgl tesseract-ocr-tha tesseract-ocr-tur tesseract-ocr-ukr tesseract-ocr-vie build-essential nodejs exim4-daemon-heavy libsvm3 libsvm-dev liblinear3 liblinear-dev libzbar-dev cm-super libgs-dev ghostscript default-libmysqlclient-dev libgmp-dev python-passlib libsasl2-dev libldap2-dev fonts-ebgaramond-extra ttf-liberation fonts-liberation
+RUN apt -y autoremove
+RUN mkdir -p /etc/ssl/docassemble /usr/share/docassemble/local /usr/share/docassemble/certs /usr/share/docassemble/backup /usr/share/docassemble/config /usr/share/docassemble/webapp /usr/share/docassemble/files /var/www/.pip /var/www/.cache /usr/share/docassemble/log /tmp/docassemble /var/www/html/log
+RUN chown -R www-data.www-data /var/www
+RUN chsh -s /bin/bash www-data
+RUN npm install -g azure-storage-cmd
+RUN git clone https://github.com/letsencrypt/letsencrypt /usr/share/docassemble/letsencrypt
+RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf
+RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
+RUN easy_install pip
+RUN pip install --upgrade virtualenv pip 3to2 pdfx
 COPY . /tmp/docassemble/
 RUN cp /tmp/docassemble/docassemble_webapp/docassemble.wsgi /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/*.sh /usr/share/docassemble/webapp/
@@ -37,7 +52,9 @@ USER root
 RUN rm -rf /tmp/docassemble
 RUN sed -i -e 's/^\(daemonize\s*\)yes\s*$/\1no/g' -e 's/^bind 127.0.0.1/bind 0.0.0.0/g' /etc/redis/redis.conf
 RUN sed -i -e 's/#APACHE_ULIMIT_MAX_FILES/APACHE_ULIMIT_MAX_FILES/' -e 's/ulimit -n 65536/ulimit -n 8192/' /etc/apache2/envvars
-RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen && update-locale LANG=en_US.UTF-8
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+RUN locale-gen
+RUN update-locale LANG=en_US.UTF-8
 RUN a2dismod ssl; a2enmod wsgi; a2enmod rewrite; a2enmod xsendfile; a2enmod proxy; a2enmod proxy_http; a2enmod proxy_wstunnel; a2enmod headers; a2enconf docassemble
 EXPOSE 80 443 9001 514 25 465 8080 8081 5432 6379 4369 5671 5672 25672
 ENV CONTAINERROLE="all" LOCALE="en_US.UTF-8 UTF-8" TIMEZONE="America/New_York" EC2="" S3ENABLE="" S3BUCKET="" S3ACCESSKEY="" S3SECRETACCESSKEY="" DAHOSTNAME="" USEHTTPS="" USELETSENCRYPT="" LETSENCRYPTEMAIL="" DBHOST="" LOGSERVER="" REDIS="" RABBITMQ=""
