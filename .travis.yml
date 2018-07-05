@@ -15,18 +15,18 @@ before_script:
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 stages:
-- Build
-- Test
+- build
+- test
 jobs:
   include:
-  - stage: Build
+  - stage: build
     services: docker
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
     - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
     - docker push $REPO_URL:$TRAVIS_BRANCH
-  - stage: Test
+  - stage: test
     addons:
       chrome: stable
     if: type = push
