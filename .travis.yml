@@ -21,6 +21,12 @@ before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
+  - stage: test
+    if: type = push
+    script:
+    - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
+    - pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
+    - python tests/run.py $START $END
 jobs:
   include:
   - stage: build
@@ -29,9 +35,3 @@ jobs:
     - docker build -t docassemble:$TRAVIS_BRANCH .
     - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
     - docker push $REPO_URL:$TRAVIS_BRANCH
-  - stage: test
-    if: type = push
-    script:
-    - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
-    - pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
-    - python tests/run.py $START $END
