@@ -1,5 +1,8 @@
 language: python
-services: docker
+services:
+- docker
+addons:
+  chrome: stable
 env:
   matrix:
   - START=1 END=101
@@ -26,8 +29,6 @@ jobs:
     - docker push $REPO_URL:$TRAVIS_BRANCH
   - stage: test
     if: type = push
-    addons:
-      chrome: stable
     script:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
