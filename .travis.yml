@@ -7,6 +7,8 @@ before_script:
 jobs:
   include:
   - stage: Build
+    services:
+    - docker
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
