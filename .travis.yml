@@ -9,20 +9,20 @@ env:
 - START=201 END=301
 - START=301 END=401
 - START=401 END=501
-  - env: START=501 END=601
-  - env: START=601 END=701
-  - env: START=701 END=801
-  - env: START=801 END=901
-  - env: START=901 END=1001
+- START=501 END=601
+- START=601 END=701
+- START=701 END=801
+- START=801 END=901
+- START=901 END=1001
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 stages:
 - name: build
-  if: type = push
+  if: type != pull_request
 - name: test
-  if: type = push
+  if: type != pull_request
 jobs:
   include:
   - stage: build
