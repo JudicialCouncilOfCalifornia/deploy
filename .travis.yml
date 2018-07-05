@@ -8,14 +8,10 @@ matrix:
   include:
   - env: START=1 END=101
   - env: START=101 END=201
-  - env: START=201
-    env: END=301
-  - env: START=301
-    env: END=401
-  - env: START=401
-    env: END=501
-  - env: START=501
-    env: END=601
+  - env: START=201 END=301
+  - env: START=301 END=401
+  - env: START=401 END=501
+  - env: START=501 END=601
   - env: START=601 END=701
   - env: START=701 END=801
   - env: START=801 END=901
