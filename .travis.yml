@@ -22,6 +22,8 @@ before_script:
 stages:
 - name: build
   if: type = push
+- name: test
+  if: type = push
 jobs:
   include:
   - stage: build
