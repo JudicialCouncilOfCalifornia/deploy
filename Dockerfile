@@ -12,7 +12,8 @@ RUN npm install -g azure-storage-cmd
 RUN cd /usr/share/docassemble && git clone https://github.com/letsencrypt/letsencrypt
 RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf
 RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
-RUN easy_install pip && pip install --upgrade virtualenv pip 3to2 pdfx
+RUN easy_install pip
+RUN pip install --upgrade virtualenv pip 3to2 pdfx
 COPY . /tmp/docassemble/
 RUN cp /tmp/docassemble/docassemble_webapp/docassemble.wsgi /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/*.sh /usr/share/docassemble/webapp/
