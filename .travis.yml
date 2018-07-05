@@ -4,9 +4,7 @@ services:
 addons:
   chrome: stable
 env:
-matrix:
-  include:
-  - env: START=1 END=101
+- START=1 END=101
   - env: START=101 END=201
   - env: START=201 END=301
   - env: START=301 END=401
