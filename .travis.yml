@@ -2,8 +2,6 @@ env:
   global:
   - PATH=$PATH:$HOME/.local/bin
 language: python
-services:
-- docker
 before_script:
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
