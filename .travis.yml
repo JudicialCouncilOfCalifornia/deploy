@@ -3,6 +3,9 @@ services:
 - docker
 addons:
   chrome: stable
+stages:
+- build
+- test
 env:
 - START=1 END=101
 - START=101 END=201
@@ -18,9 +21,6 @@ before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
-stages:
-- build
-- test
 jobs:
   include:
   - stage: build
