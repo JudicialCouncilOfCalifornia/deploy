@@ -19,6 +19,9 @@ before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
+stages:
+- name: build
+  if: type = push
 jobs:
   include:
   - stage: build
