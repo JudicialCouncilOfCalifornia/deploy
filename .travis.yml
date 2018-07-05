@@ -5,10 +5,10 @@ addons:
   chrome: stable
 env:
 - START=1 END=101
-  - env: START=101 END=201
-  - env: START=201 END=301
-  - env: START=301 END=401
-  - env: START=401 END=501
+- START=101 END=201
+- START=201 END=301
+- START=301 END=401
+- START=401 END=501
   - env: START=501 END=601
   - env: START=601 END=701
   - env: START=701 END=801
