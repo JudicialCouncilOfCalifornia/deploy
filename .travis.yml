@@ -14,8 +14,8 @@ jobs:
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
-    - docker tag docassemble:$TRAVIS_BRANCH 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
-    - docker push 617580300246.dkr.ecr.us-east-1.amazonaws.com/docassemble:$TRAVIS_BRANCH
+    - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
+    - docker push $REPO_URL:$TRAVIS_BRANCH
   - stage: Test
     if: type = push
     script:
