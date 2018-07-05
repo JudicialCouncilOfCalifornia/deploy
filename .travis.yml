@@ -1,7 +1,11 @@
 language: python
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
-- pip install 
+- pip install awscli
+chromedriver_installer
+lettuce
+lettuce_webdriver
+python-Levenshtein
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
   include:
