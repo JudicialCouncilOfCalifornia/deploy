@@ -4,8 +4,10 @@ services:
 addons:
   chrome: stable
 stages:
-- build
-- test
+- name: build
+  if: type = push
+- name: test
+  if: type = push
 env:
 - START=1 END=101
 - START=101 END=201
