@@ -1,4 +1,6 @@
 language: python
+env:
+- START=1 END=101
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
