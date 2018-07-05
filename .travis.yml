@@ -10,12 +10,6 @@ before_script:
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
   include:
-  - stage: Build base
-    if: type = api
-    script:
-    - cd base && docker build -t docassemble-base:latest .
-    - docker tag docassemble-base:latest 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
-    - docker push 617580300246.dkr.ecr.us-west-2.amazonaws.com/docassemble-base:latest
   - stage: Build application
     if: type = push
     script:
