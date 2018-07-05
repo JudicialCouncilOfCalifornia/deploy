@@ -19,10 +19,8 @@ before_script:
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 stages:
-- name: build
-  if: type != pull_request
-- name: test
-  if: type != pull_request
+- build
+- test
 jobs:
   include:
   - stage: build
