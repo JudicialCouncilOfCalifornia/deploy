@@ -1,8 +1,7 @@
-env:
-  global:
-  - PATH=$PATH:$HOME/.local/bin
 language: python
 before_script:
+- export PATH=$PATH:$HOME/.local/bin
+- pip install 
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
   include:
