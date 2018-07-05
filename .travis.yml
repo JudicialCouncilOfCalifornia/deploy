@@ -10,7 +10,7 @@ stages:
   if: type = push
 env:
 - START=0 END=50
-- START=101 END=201
+- START=50 END=100
 - START=201 END=301
 - START=301 END=401
 - START=401 END=501
