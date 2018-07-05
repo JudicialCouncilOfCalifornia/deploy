@@ -70,3 +70,9 @@ jobs:
     - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
     - sleep 5m
     - python tests/run.py 801 901
+  - stage: Test
+    if: type = push
+    script:
+    - docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
+    - sleep 5m
+    - python tests/run.py 901 1001
