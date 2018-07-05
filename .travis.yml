@@ -5,11 +5,11 @@ env:
 - START=201 END=301
 - START=301 END=401
 - START=401 END=501
-- START=1 END=101
-- START=101 END=201
-- START=201 END=301
-- START=301 END=401
-- START=401 END=501
+- START=501 END=101
+- START=601 END=201
+- START=701 END=301
+- START=801 END=401
+- START=901 END=501
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - pip install awscli chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
