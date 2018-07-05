@@ -10,7 +10,7 @@ before_script:
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 jobs:
   include:
-  - stage: Build application
+  - stage: Build
     if: type = push
     script:
     - docker build -t docassemble:$TRAVIS_BRANCH .
