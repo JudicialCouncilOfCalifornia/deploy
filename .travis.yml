@@ -6,10 +6,8 @@ addons:
 env:
 matrix:
   include:
-  - env: START=1
-    env: END=101
-  - env: START=101
-    env: END=201
+  - env: START=1 END=101
+  - env: START=101 END=201
   - env: START=201
     env: END=301
   - env: START=301
