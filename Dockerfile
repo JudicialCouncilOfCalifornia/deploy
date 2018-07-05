@@ -9,7 +9,7 @@ RUN mkdir -p /etc/ssl/docassemble /usr/share/docassemble/local /usr/share/docass
 RUN chown -R www-data.www-data /var/www
 RUN chsh -s /bin/bash www-data
 RUN npm install -g azure-storage-cmd
-RUN cd /usr/share/docassemble && git clone https://github.com/letsencrypt/letsencrypt
+RUN git clone https://github.com/letsencrypt/letsencrypt /usr/share/docassemble/letsencrypt
 RUN echo "host   all   all  0.0.0.0/0   md5" >> /etc/postgresql/9.6/main/pg_hba.conf
 RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
 RUN easy_install pip
