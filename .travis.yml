@@ -6,8 +6,10 @@ addons:
 stages:
 - name: build
   if: type = push
+- name: push
+  if: ( type = push ) && ( branch = master )
 - name: test
-  if: type = push
+  if: ( type = push ) && ( branch != master )
 env:
 - START=0 END=50
 - START=50 END=100
@@ -34,13 +36,20 @@ before_script:
 - pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 script:
-- docker run -d -p 80:80 $REPO_URL:$TRAVIS_BRANCH
+- docker run -d -p 80:80 $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
 - pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
 - python tests/run.py $START $END
 jobs:
   include:
   - stage: build
     script:
-    - docker build -t docassemble:$TRAVIS_BRANCH .
-    - docker tag docassemble:$TRAVIS_BRANCH $REPO_URL:$TRAVIS_BRANCH
-    - docker push $REPO_URL:$TRAVIS_BRANCH
+    - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
+    - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
+    - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
+  - stage: push
+    script:
+    - wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+    - unzip terraform_0.11.7_linux_amd64.zip -d .
+    - rm terraform_0.11.7_linux_amd64.zip
+    - ./terraform init -backend-config="bucket=${TF_VAR_NAME}" -backend-config="key=main.tfstate"
+    - ./terraform apply -auto-approve
