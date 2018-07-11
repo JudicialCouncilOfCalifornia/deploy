@@ -55,3 +55,7 @@ resource "aws_acm_certificate_validation" "da_validation" {
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
+
+resource "aws_ecs_cluster" "da_cluster" {
+  name = "${var.NAME}"
+}
