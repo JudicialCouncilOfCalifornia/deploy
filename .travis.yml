@@ -6,10 +6,10 @@ addons:
 stages:
 - name: build
   if: type = push
-- name: deploy
-  if: ( type = push ) && ( branch = master )
+- name: terraform
+  if: ( type = push ) AND ( branch = master )
 - name: test
-  if: ( type = push ) && ( branch != master )
+  if: ( type = push ) AND ( branch != master )
 env:
 - START=0 END=50
 - START=50 END=100
@@ -38,7 +38,7 @@ jobs:
     - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
     - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
     - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
-  - stage: deploy
+  - stage: terraform
     script:
     - wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
     - unzip terraform_0.11.7_linux_amd64.zip -d .
