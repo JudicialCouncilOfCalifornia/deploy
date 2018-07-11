@@ -60,7 +60,6 @@ resource "aws_ecs_cluster" "da_cluster" {
   name = "${var.NAME}"
 }
 
-/*
 resource "aws_ecs_task_definition" "da_task" {
   name = "${var.NAME}"
 }
@@ -68,4 +67,3 @@ resource "aws_ecs_task_definition" "da_task" {
 resource "aws_ecs_service" "da_service" {
   name = "${var.NAME}"
 }
-*/
