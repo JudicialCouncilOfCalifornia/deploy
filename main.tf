@@ -51,3 +51,7 @@ resource "aws_acm_certificate_validation" "da_validation" {
   certificate_arn         = "${aws_acm_certificate.da_certificate.arn}"
   validation_record_fqdns = ["${aws_route53_record.da_record.*.fqdn}"]
 }
+
+resource "aws_ecr_repository" "da_repository" {
+  name = "${var.NAME}"
+}
