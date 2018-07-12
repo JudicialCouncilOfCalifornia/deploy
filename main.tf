@@ -68,8 +68,12 @@ resource "aws_ecs_task_definition" "da_task" {
     "essential": true,
     "portMappings": [
       {
-        "http": 80,
-        "https": 443
+        "containerPort": 80,
+        "hostPort": 80
+      },
+      {
+        "containerPort": 443,
+        "hostPort": 443
       }
     ]
   }
