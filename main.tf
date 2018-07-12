@@ -67,7 +67,7 @@ resource "aws_ecs_task_definition" "da_task" {
 
 resource "aws_ecs_service" "da_service" {
   cluster = "${aws_ecs_cluster.da_cluster.id}"
-  launch_type = FARGATE
+  launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 }
