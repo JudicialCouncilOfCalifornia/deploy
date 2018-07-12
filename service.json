@@ -1,1 +1,12 @@
-
+[
+  {
+    "image": "${aws_ecr_repository.da_repository.repository_url}:$LATEST",
+    "essential": true,
+    "portMappings": [
+      {
+        "http": 80,
+        "https": 443
+      }
+    ]
+  }
+]
