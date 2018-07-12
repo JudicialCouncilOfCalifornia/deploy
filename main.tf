@@ -130,7 +130,7 @@ resource "aws_ecs_task_definition" "da_task" {
 [
   {
     "name": "${var.NAME}",
-    "image": "${aws_ecr_repository.da_repository.repository_url}",
+    "image": "${aws_ecr_repository.da_repository.repository_url}:master",
     "essential": true,
     "portMappings": [
       {
