@@ -65,7 +65,7 @@ resource "aws_ecs_task_definition" "da_task" {
   cpu = 512
   family = "${var.NAME}"
   memory = 1024
-  requires_compatibilities = "FARGATE"
+  requires_compatibilities = ["FARGATE"]
 }
 
 resource "aws_ecs_service" "da_service" {
