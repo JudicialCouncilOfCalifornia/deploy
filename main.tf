@@ -98,12 +98,20 @@ resource "aws_security_group" "da_security" {
     protocol  = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 data "aws_availability_zones" "da_az" {}
 
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_subnet" "da_subnet" {
@@ -112,10 +120,18 @@ resource "aws_subnet" "da_subnet" {
   availability_zone = "${data.aws_availability_zones.da_az.names[count.index]}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_internet_gateway" "da_gateway" {
   vpc_id = "${aws_vpc.da_vpc.id}"
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_route" "da_route" {
