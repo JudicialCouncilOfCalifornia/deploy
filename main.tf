@@ -9,7 +9,7 @@ variable "NAME" {}
 provider "aws" {}
 
 resource "aws_acm_certificate" "da_certificate" {
-  domain_name       = "${var.DOMAIN}"
+  domain_name = "${var.DOMAIN}"
   validation_method = "DNS"
 
   tags {
@@ -18,7 +18,7 @@ resource "aws_acm_certificate" "da_certificate" {
 }
 
 resource "aws_s3_bucket" "da_bucket" {
-  bucket        = "${var.NAME}"
+  bucket = "${var.NAME}"
   force_destroy = true
 
   tags {
@@ -39,16 +39,16 @@ resource "aws_route53_zone" "da_zone" {
 }
 
 resource "aws_route53_record" "da_record" {
-  count   = "${length(aws_acm_certificate.da_certificate.domain_validation_options)}"
-  name    = "${lookup(aws_acm_certificate.da_certificate.domain_validation_options[count.index], "resource_record_name")}"
+  count = "${length(aws_acm_certificate.da_certificate.domain_validation_options)}"
+  name = "${lookup(aws_acm_certificate.da_certificate.domain_validation_options[count.index], "resource_record_name")}"
   records = ["${lookup(aws_acm_certificate.da_certificate.domain_validation_options[count.index], "resource_record_value")}"]
-  ttl     = 60
-  type    = "${lookup(aws_acm_certificate.da_certificate.domain_validation_options[count.index], "resource_record_type")}"
+  ttl = 60
+  type = "${lookup(aws_acm_certificate.da_certificate.domain_validation_options[count.index], "resource_record_type")}"
   zone_id = "${aws_route53_zone.da_zone.zone_id}"
 }
 
 resource "aws_acm_certificate_validation" "da_validation" {
-  certificate_arn         = "${aws_acm_certificate.da_certificate.arn}"
+  certificate_arn = "${aws_acm_certificate.da_certificate.arn}"
   validation_record_fqdns = ["${aws_route53_record.da_record.*.fqdn}"]
 }
 
@@ -100,6 +100,30 @@ resource "aws_route" "da_route" {
   gateway_id = "${aws_internet_gateway.da_gateway.id}"
 }
 
+resource "aws_alb" "da_alb" {
+  name = "${var.NAME}"
+  subnets = ["${aws_subnet.da_subnet.*.id}"]
+}
+
+resource "aws_alb_target_group" "da_target" {
+  name = "${var.NAME}"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+  target_type = "ip"
+}
+
+resource "aws_alb_listener" "da_listener" {
+  load_balancer_arn = "${aws_alb.da_alb.id}"
+  port = 80
+  protocol = "HTTP"
+
+  default_action {
+    target_group_arn = "${aws_alb_target_group.da_target.id}"
+    type = "forward"
+  }
+}
+
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
@@ -139,7 +163,13 @@ resource "aws_ecs_service" "da_service" {
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
-  
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.da_target.id}"
+    container_name = "${var.NAME}"
+    container_port = 80
+  }
+
   network_configuration {
     subnets = ["${aws_subnet.da_subnet.*.id}"]
     assign_public_ip = true
