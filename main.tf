@@ -61,9 +61,11 @@ resource "aws_ecs_cluster" "da_cluster" {
 }
 
 resource "aws_ecs_task_definition" "da_task" {
-  name = "${var.NAME}"
+  family = "${var.NAME}"
 }
 
 resource "aws_ecs_service" "da_service" {
+  launch_type = FARGATE
   name = "${var.NAME}"
+  task_definition = "${aws_ecs_task_definition.da_task.arn}"
 }
