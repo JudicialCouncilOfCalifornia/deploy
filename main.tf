@@ -196,7 +196,7 @@ resource "aws_ecs_service" "da_service" {
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
   network_configuration {
-    subnets = ["${aws_subnet.da_subnet.id}"]
+    subnets = ["${aws_subnet.da_subnet.*.id}"]
     security_groups = ["${aws_security_group.da_security.id}"]
     assign_public_ip = true
   }
