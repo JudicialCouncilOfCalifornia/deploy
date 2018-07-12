@@ -69,8 +69,7 @@ resource "aws_iam_role" "da_iam" {
       "Principal": {
         "Service": "ecs-tasks.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }
@@ -144,6 +143,14 @@ resource "aws_ecs_task_definition" "da_task" {
         "hostPort": 80
       }
     ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-create-group": "true",
+        "awslogs-region": "us-east-1",
+        "awslogs-group": "${var.NAME}",
+      }
+    },
     "environment": [
       {
         "name": "S3ENABLE",
