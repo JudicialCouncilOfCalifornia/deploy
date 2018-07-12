@@ -53,7 +53,7 @@ resource "aws_acm_certificate_validation" "da_validation" {
 }
 
 resource "aws_iam_role" "da_iam" {
-  name = "blog-ecs-task-execution-role"
+  name = "${var.NAME}"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -74,6 +74,25 @@ EOF
 resource "aws_iam_role_policy_attachment" "da_attachment" {
   role = "${aws_iam_role.da_iam.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_security_group" "da_security" {
+  name        = "${var.NAME}"
+  vpc_id      = "${aws_vpc.da_vpc.id}"
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 data "aws_availability_zones" "da_az" {}
@@ -140,6 +159,7 @@ resource "aws_ecs_service" "da_service" {
 
   network_configuration {
     subnets = ["${aws_subnet.da_subnet.id}"]
+    security_group = ["${aws_security_group.da_security.id}"]
     assign_public_ip = true
   }
 }
