@@ -6,6 +6,12 @@ variable "DOMAIN" {}
 
 variable "NAME" {}
 
+variable "S3_ID" {}
+
+variable "S3_SECRET" {}
+
+variable "S3_REGION" {}
+
 provider "aws" {}
 
 resource "aws_acm_certificate" "da_certificate" {
@@ -136,6 +142,28 @@ resource "aws_ecs_task_definition" "da_task" {
       {
         "containerPort": 80,
         "hostPort": 80
+      }
+    ],
+    "environment": [
+      {
+        "name": "S3ENABLE",
+        "value": true
+      },
+      {
+        "name": "S3BUCKET",
+        "value": "${var.NAME}"
+      },
+      {
+        "name": "S3ACCESSKEY",
+        "value": "${var.S3_ID}"
+      },
+      {
+        "name": "S3SECRETACCESSKEY",
+        "value": "${var.S3_SECRET}"
+      },
+      {
+        "name": "S3REGION",
+        "value": "${var.S3_REGION}"
       }
     ]
   }
