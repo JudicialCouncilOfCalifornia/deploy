@@ -187,6 +187,7 @@ DEFINITION
 }
 
 resource "aws_ecs_service" "da_service" {
+  depends_on = ["aws_ecs_task_definition.da_task"]
   cluster = "${aws_ecs_cluster.da_cluster.id}"
   desired_count = 1
   launch_type = "FARGATE"
