@@ -64,6 +64,7 @@ resource "aws_ecs_task_definition" "da_task" {
   container_definitions = <<DEFINITION
 [
   {
+    "name": "${var.NAME}",
     "image": "${aws_ecr_repository.da_repository.repository_url}:$LATEST",
     "essential": true,
     "portMappings": [
