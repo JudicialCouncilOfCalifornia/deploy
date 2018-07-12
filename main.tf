@@ -61,7 +61,21 @@ resource "aws_ecs_cluster" "da_cluster" {
 }
 
 resource "aws_ecs_task_definition" "da_task" {
-  container_definitions = "${file("service.json")}"
+  container_definitions = <<DEFINITION
+[
+  {
+    "image": "${aws_ecr_repository.da_repository.repository_url}:$LATEST",
+    "essential": true,
+    "portMappings": [
+      {
+        "http": 80,
+        "https": 443
+      }
+    ]
+  }
+]
+DEFINITION
+
   cpu = 512
   family = "${var.NAME}"
   memory = 1024
