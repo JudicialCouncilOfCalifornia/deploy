@@ -166,7 +166,7 @@ resource "aws_ecs_task_definition" "da_task" {
       "options": {
         "awslogs-create-group": "true",
         "awslogs-region": "us-east-1",
-        "awslogs-group": "${var.NAME}"
+        "awslogs-group": "${var.NAME}",
         "awslogs-stream-prefix": "main"
       }
     },
