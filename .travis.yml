@@ -5,11 +5,11 @@ addons:
   chrome: stable
 stages:
 - name: build
-  if: type = push
-- name: terraform
   if: ( type = push ) AND ( branch = master )
+- name: terraform
+  if: type = push
 - name: test
-  if: ( type = push ) AND ( branch != master )
+  if: ( type = push ) AND ( branch = master )
 env:
 - START=000 END=050
 - START=050 END=100
