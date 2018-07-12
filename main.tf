@@ -76,6 +76,30 @@ resource "aws_iam_role_policy_attachment" "da_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+data "aws_availability_zones" "da_az" {}
+
+resource "aws_vpc" "da_vpc" {
+  cidr_block = "192.168.0.0/16"
+}
+
+resource "aws_subnet" "da_subnet" {
+  count = "${var.az_count}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 8, var.az_count + count.index)}"
+  availability_zone = "${data.aws_availability_zones.da_az.names[count.index]}"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_internet_gateway" "da_gateway" {
+  vpc_id = "${aws_vpc.da_vpc.id}"
+}
+
+resource "aws_route" "da_route" {
+  route_table_id = "${aws_vpc.da_vpc.main_route_table_id}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = "${aws_internet_gateway.da_gateway.id}"
+}
+
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
@@ -119,4 +143,9 @@ resource "aws_ecs_service" "da_service" {
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
+  
+  network_configuration {
+    subnets = ["${aws_subnet.da_subnet.*.id}"]
+    assign_public_ip = true
+  }
 }
