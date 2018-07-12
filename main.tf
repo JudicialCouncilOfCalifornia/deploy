@@ -100,30 +100,6 @@ resource "aws_route" "da_route" {
   gateway_id = "${aws_internet_gateway.da_gateway.id}"
 }
 
-resource "aws_alb" "da_alb" {
-  name = "${var.NAME}"
-  subnets = ["${aws_subnet.da_subnet.*.id}"]
-}
-
-resource "aws_alb_target_group" "da_target" {
-  name = "${var.NAME}"
-  port = 80
-  protocol = "HTTP"
-  vpc_id = "${aws_vpc.da_vpc.id}"
-  target_type = "ip"
-}
-
-resource "aws_alb_listener" "da_listener" {
-  load_balancer_arn = "${aws_alb.da_alb.id}"
-  port = 80
-  protocol = "HTTP"
-
-  default_action {
-    target_group_arn = "${aws_alb_target_group.da_target.id}"
-    type = "forward"
-  }
-}
-
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
@@ -163,12 +139,6 @@ resource "aws_ecs_service" "da_service" {
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
-
-  load_balancer {
-    target_group_arn = "${aws_alb_target_group.da_target.id}"
-    container_name = "${var.NAME}"
-    container_port = 80
-  }
 
   network_configuration {
     subnets = ["${aws_subnet.da_subnet.*.id}"]
