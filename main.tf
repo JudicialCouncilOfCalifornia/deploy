@@ -81,34 +81,11 @@ resource "aws_iam_role_policy_attachment" "da_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_security_group" "da_security" {
-  name        = "${var.NAME}"
-  vpc_id      = "${aws_vpc.da_vpc.id}"
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  
-  tags {
-    Name = "${var.NAME}"
-  }
-}
-
 data "aws_availability_zones" "da_az" {}
 
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
-  
+
   tags {
     Name = "${var.NAME}"
   }
@@ -120,7 +97,7 @@ resource "aws_subnet" "da_subnet" {
   availability_zone = "${data.aws_availability_zones.da_az.names[count.index]}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
-  
+
   tags {
     Name = "${var.NAME}"
   }
@@ -128,7 +105,7 @@ resource "aws_subnet" "da_subnet" {
 
 resource "aws_internet_gateway" "da_gateway" {
   vpc_id = "${aws_vpc.da_vpc.id}"
-  
+
   tags {
     Name = "${var.NAME}"
   }
@@ -136,8 +113,53 @@ resource "aws_internet_gateway" "da_gateway" {
 
 resource "aws_route" "da_route" {
   route_table_id = "${aws_vpc.da_vpc.main_route_table_id}"
-  destination_cidr_block = "0.0.0.0/0"
   gateway_id = "${aws_internet_gateway.da_gateway.id}"
+  destination_cidr_block = "0.0.0.0/0"
+}
+
+resource "aws_security_group" "da_security" {
+  name = "${var.NAME}"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  ingress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_network_acl" "da_acl" {
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  egress {
+    protocol = "-1"
+    rule_no = 200
+    action = "allow"
+    from_port = 0
+    to_port = 0
+    cidr_block = "0.0.0.0/0"
+  }
+
+  ingress {
+    protocol = "-1"
+    rule_no = 200
+    action = "allow"
+    from_port = 0
+    to_port = 0
+    cidr_block = "0.0.0.0/0"
+  }
+
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_ecr_repository" "da_repository" {
