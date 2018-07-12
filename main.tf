@@ -52,6 +52,30 @@ resource "aws_acm_certificate_validation" "da_validation" {
   validation_record_fqdns = ["${aws_route53_record.da_record.*.fqdn}"]
 }
 
+resource "aws_iam_role" "da_iam" {
+  name = "blog-ecs-task-execution-role"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "da_attachment" {
+  role = "${aws_iam_role.da_iam.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
@@ -82,6 +106,7 @@ resource "aws_ecs_task_definition" "da_task" {
 DEFINITION
 
   cpu = 512
+  execution_role_arn = "${aws_iam_role.da_iam.arn}"
   family = "${var.NAME}"
   memory = 1024
   network_mode = "awsvpc"
