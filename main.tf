@@ -137,6 +137,12 @@ resource "aws_ecs_task_definition" "da_task" {
         "containerPort": 80,
         "hostPort": 80
       }
+    ],
+    "environment": [
+      {
+        "name": "NAME",
+        "value": "${var.NAME}"
+      }
     ]
   }
 ]
