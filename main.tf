@@ -84,6 +84,7 @@ DEFINITION
   cpu = 512
   family = "${var.NAME}"
   memory = 1024
+  network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 }
 
