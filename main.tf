@@ -67,7 +67,12 @@ resource "aws_ecs_task_definition" "da_task" {
 
 resource "aws_ecs_service" "da_service" {
   cluster = "${aws_ecs_cluster.da_cluster.id}"
+  desired_count = 1
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
+
+  network_configuration {
+    assign_public_ip = true
+  }
 }
