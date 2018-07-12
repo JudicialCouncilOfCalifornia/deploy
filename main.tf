@@ -83,8 +83,8 @@ resource "aws_vpc" "da_vpc" {
 }
 
 resource "aws_subnet" "da_subnet" {
-  count = "${count(data.aws_availability_zones.da_az.names)}"
-  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count(data.aws_availability_zones.da_az.names) + count.index)}"
+  count = "${length(data.aws_availability_zones.da_az.names)}"
+  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, length(data.aws_availability_zones.da_az.names) + count.index)}"
   availability_zone = "${data.aws_availability_zones.da_az.names[count.index]}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
