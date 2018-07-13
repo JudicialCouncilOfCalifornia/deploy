@@ -213,13 +213,13 @@ DEFINITION
   family = "${var.NAME}"
   memory = 1024
   network_mode = "awsvpc"
-  requires_compatibilities = ["EC2"]
+  requires_compatibilities = ["FARGATE"]
 }
 
 resource "aws_ecs_service" "da_service" {
   cluster = "${aws_ecs_cluster.da_cluster.id}"
   desired_count = 1
-  launch_type = "EC2"
+  launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
