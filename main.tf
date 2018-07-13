@@ -107,15 +107,23 @@ resource "aws_internet_gateway" "da_internet" {
   }
 }
 
+resource "aws_route_table" "da_table_public" {
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  tags {
+    Name = "${var.NAME}"
+  }
+}
+
 resource "aws_route" "da_route_iw" {
-  route_table_id = "${aws_vpc.da_vpc.main_route_table_id}"
+  route_table_id = "${aws_route_table.da_table_public.id}"
   gateway_id = "${aws_internet_gateway.da_internet.id}"
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "da_assoc_public" {
   subnet_id = "${aws_subnet.da_subnet_public.id}"
-  route_table_id = "${aws_route.da_route_iw.id}"
+  route_table_id = "${aws_route_table.da_table_public.id}"
 }
 
 resource "aws_eip" "da_eip" {
@@ -140,7 +148,7 @@ resource "aws_subnet" "da_subnet_private" {
   }
 }
 
-resource "aws_route_table" "da_table" {
+resource "aws_route_table" "da_table_private" {
   vpc_id = "${aws_vpc.da_vpc.id}"
 
   tags {
@@ -150,11 +158,11 @@ resource "aws_route_table" "da_table" {
 
 resource "aws_route_table_association" "da_assoc_private" {
   subnet_id = "${aws_subnet.da_subnet_private.id}"
-  route_table_id = "${aws_route_table.da_table.id}"
+  route_table_id = "${aws_route_table.da_table_private.id}"
 }
 
 resource "aws_route" "da_route_nat" {
-  route_table_id  = "${aws_route_table.da_table.id}"
+  route_table_id  = "${aws_route_table.da_table_private.id}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = "${aws_nat_gateway.da_nat.id}"
 }
