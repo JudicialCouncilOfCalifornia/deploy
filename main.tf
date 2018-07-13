@@ -76,14 +76,9 @@ resource "aws_iam_role" "da_iam" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "da_attachment_ecs" {
+resource "aws_iam_role_policy_attachment" "da_policy" {
   role = "${aws_iam_role.da_iam.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_iam_role_policy_attachment" "da_attachment_logs" {
-  role = "${aws_iam_role.da_iam.name}"
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
 
 data "aws_availability_zones" "da_az" {}
@@ -165,7 +160,6 @@ resource "aws_ecs_task_definition" "da_task" {
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-create-group": "true",
         "awslogs-region": "us-east-1",
         "awslogs-group": "${var.NAME}",
         "awslogs-stream-prefix": "main"
