@@ -2071,39 +2071,42 @@ def make_navbar(status, steps, show_login, chat_info, debug_mode):
             else:
                 navbar += '            <li class="nav-item"><a class="nav-link" href="' + url_for('user.login') + '">' + sign_in_text + '</a></li>'
         else:
-            navbar += '            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle d-none d-md-block" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + (current_user.email if current_user.email else re.sub(r'.*\$', '', current_user.social_id)) + '</a><div class="dropdown-menu dropdown-menu-right">'
-            if custom_menu:
-                navbar += custom_menu
-            if not status.question.interview.options.get('hide_standard_menu', False):
-                if current_user.has_role('admin', 'advocate'):
-                    navbar +='<a class="dropdown-item" href="' + url_for('monitor') + '">' + word('Monitor') + '</a>'
-                if current_user.has_role('admin', 'developer', 'trainer'):
-                    navbar +='<a class="dropdown-item" href="' + url_for('train') + '">' + word('Train') + '</a>'
-                if current_user.has_role('admin', 'developer'):
-                    navbar +='<a class="dropdown-item" href="' + url_for('update_package') + '">' + word('Package Management') + '</a>'
-                    navbar +='<a class="dropdown-item" href="' + url_for('logs') + '">' + word('Logs') + '</a>'
-                    navbar +='<a class="dropdown-item" href="' + url_for('playground_page') + '">' + word('Playground') + '</a>'
-                    navbar +='<a class="dropdown-item" href="' + url_for('utilities') + '">' + word('Utilities') + '</a>'
-                    if current_user.has_role('admin'):
-                        navbar +='<a class="dropdown-item" href="' + url_for('user_list') + '">' + word('User List') + '</a>'
-                        navbar +='<a class="dropdown-item" href="' + url_for('config_page') + '">' + word('Configuration') + '</a>'
-                if app.config['SHOW_DISPATCH']:
-                    navbar += '<a class="dropdown-item" href="' + url_for('interview_start') + '">' + word('Available Interviews') + '</a>'
-                if app.config['SHOW_MY_INTERVIEWS'] or current_user.has_role('admin'):
-                    navbar += '<a class="dropdown-item" href="' + url_for('interview_list') + '">' + word('My Interviews') + '</a>'
-                if current_user.has_role('admin', 'developer'):
-                    navbar += '<a class="dropdown-item" href="' + url_for('user_profile_page') + '">' + word('Profile') + '</a>'
-                else:
-                    if app.config['SHOW_PROFILE'] or current_user.has_role('admin'):
+            if (custom_menu is False or custom_menu == '') and status.question.interview.options.get('hide standard menu', False):
+                navbar += '            <li class="nav-item"><a class="nav-link" tabindex="0">' + (current_user.email if current_user.email else re.sub(r'.*\$', '', current_user.social_id)) + '</a></li>'
+            else:
+                navbar += '            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle d-none d-md-block" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + (current_user.email if current_user.email else re.sub(r'.*\$', '', current_user.social_id)) + '</a><div class="dropdown-menu dropdown-menu-right">'
+                if custom_menu:
+                    navbar += custom_menu
+                if not status.question.interview.options.get('hide standard menu', False):
+                    if current_user.has_role('admin', 'advocate'):
+                        navbar +='<a class="dropdown-item" href="' + url_for('monitor') + '">' + word('Monitor') + '</a>'
+                    if current_user.has_role('admin', 'developer', 'trainer'):
+                        navbar +='<a class="dropdown-item" href="' + url_for('train') + '">' + word('Train') + '</a>'
+                    if current_user.has_role('admin', 'developer'):
+                        navbar +='<a class="dropdown-item" href="' + url_for('update_package') + '">' + word('Package Management') + '</a>'
+                        navbar +='<a class="dropdown-item" href="' + url_for('logs') + '">' + word('Logs') + '</a>'
+                        navbar +='<a class="dropdown-item" href="' + url_for('playground_page') + '">' + word('Playground') + '</a>'
+                        navbar +='<a class="dropdown-item" href="' + url_for('utilities') + '">' + word('Utilities') + '</a>'
+                        if current_user.has_role('admin'):
+                            navbar +='<a class="dropdown-item" href="' + url_for('user_list') + '">' + word('User List') + '</a>'
+                            navbar +='<a class="dropdown-item" href="' + url_for('config_page') + '">' + word('Configuration') + '</a>'
+                    if app.config['SHOW_DISPATCH']:
+                        navbar += '<a class="dropdown-item" href="' + url_for('interview_start') + '">' + word('Available Interviews') + '</a>'
+                    if app.config['SHOW_MY_INTERVIEWS'] or current_user.has_role('admin'):
+                        navbar += '<a class="dropdown-item" href="' + url_for('interview_list') + '">' + word('My Interviews') + '</a>'
+                    if current_user.has_role('admin', 'developer'):
                         navbar += '<a class="dropdown-item" href="' + url_for('user_profile_page') + '">' + word('Profile') + '</a>'
                     else:
-                        navbar += '<a class="dropdown-item" href="' + url_for('user.change_password') + '">' + word('Change Password') + '</a>'
-                navbar += '<a class="dropdown-item" href="' + url_for('user.logout') + '">' + word('Sign Out') + '</a>'
+                        if app.config['SHOW_PROFILE'] or current_user.has_role('admin'):
+                            navbar += '<a class="dropdown-item" href="' + url_for('user_profile_page') + '">' + word('Profile') + '</a>'
+                        else:
+                            navbar += '<a class="dropdown-item" href="' + url_for('user.change_password') + '">' + word('Change Password') + '</a>'
+                    navbar += '<a class="dropdown-item" href="' + url_for('user.logout') + '">' + word('Sign Out') + '</a>'
             navbar += '</div></li>'
     else:
         if custom_menu:
             navbar += '            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" class="dropdown-toggle d-none d-md-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' + word("Menu") + '</a><div class="dropdown-menu dropdown-menu-right">' + custom_menu
-            if not status.question.interview.options.get('hide_standard_menu', False):
+            if not status.question.interview.options.get('hide standard menu', False):
                 navbar += '<a class="dropdown-item" href="' + url_for(status.exit_link) + '">' + word(status.exit_label) + '</a>'
             navbar += '</div></li>'
         else:
@@ -15159,14 +15162,14 @@ def user_interviews(user_id=None, secret=None, exclude_invalid=True, action=None
     subq = db.session.query(db.func.max(UserDict.indexno).label('indexno'), UserDict.filename, UserDict.key).group_by(UserDict.filename, UserDict.key).subquery()
     if user_id is not None:
         if filename is not None:
-            interview_query = db.session.query(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserModel.email).join(subq, and_(subq.c.filename == UserDictKeys.filename, subq.c.key == UserDictKeys.key)).join(UserDict, and_(UserDict.indexno == subq.c.indexno, UserDict.key == UserDictKeys.key, UserDict.filename == UserDictKeys.filename)).join(UserModel, UserModel.id == UserDictKeys.user_id).filter(UserDictKeys.user_id == user_id, UserDictKeys.filename == filename).group_by(UserModel.email, UserDictKeys.user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno)
+            interview_query = db.session.query(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserModel.email).join(subq, and_(subq.c.filename == UserDictKeys.filename, subq.c.key == UserDictKeys.key)).join(UserDict, and_(UserDict.indexno == subq.c.indexno, UserDict.key == UserDictKeys.key, UserDict.filename == UserDictKeys.filename)).join(UserModel, UserModel.id == UserDictKeys.user_id).filter(UserDictKeys.user_id == user_id, UserDictKeys.filename == filename).group_by(UserModel.email, UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno)
         else:
-            interview_query = db.session.query(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserModel.email).join(subq, and_(subq.c.filename == UserDictKeys.filename, subq.c.key == UserDictKeys.key)).join(UserDict, and_(UserDict.indexno == subq.c.indexno, UserDict.key == UserDictKeys.key, UserDict.filename == UserDictKeys.filename)).join(UserModel, UserModel.id == UserDictKeys.user_id).filter(UserDictKeys.user_id == user_id).group_by(UserModel.email, UserDictKeys.user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno)
+            interview_query = db.session.query(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserModel.email).join(subq, and_(subq.c.filename == UserDictKeys.filename, subq.c.key == UserDictKeys.key)).join(UserDict, and_(UserDict.indexno == subq.c.indexno, UserDict.key == UserDictKeys.key, UserDict.filename == UserDictKeys.filename)).join(UserModel, UserModel.id == UserDictKeys.user_id).filter(UserDictKeys.user_id == user_id).group_by(UserModel.email, UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDictKeys.filename, UserDictKeys.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno)
     else:
         if filename is not None:
-            interview_query = db.session.query(UserDict).join(subq, and_(UserDict.indexno == subq.c.indexno, UserDict.key == subq.c.key, UserDict.filename == subq.c.filename)).outerjoin(UserDictKeys, and_(UserDict.filename == UserDictKeys.filename, UserDict.key == UserDictKeys.key)).outerjoin(UserModel, and_(UserDictKeys.user_id == UserModel.id, UserModel.active == True)).filter(UserDict.filename == filename).group_by(UserModel.email, UserDictKeys.user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno).with_entities(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserModel.email)
+            interview_query = db.session.query(UserDict).join(subq, and_(UserDict.indexno == subq.c.indexno, UserDict.key == subq.c.key, UserDict.filename == subq.c.filename)).outerjoin(UserDictKeys, and_(UserDict.filename == UserDictKeys.filename, UserDict.key == UserDictKeys.key)).outerjoin(UserModel, and_(UserDictKeys.user_id == UserModel.id, UserModel.active == True)).filter(UserDict.filename == filename).group_by(UserModel.email, UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno).order_by(UserDictKeys.indexno).with_entities(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserModel.email)
         else:
-            interview_query = db.session.query(UserDict).join(subq, and_(UserDict.indexno == subq.c.indexno, UserDict.key == subq.c.key, UserDict.filename == subq.c.filename)).outerjoin(UserDictKeys, and_(UserDict.filename == UserDictKeys.filename, UserDict.key == UserDictKeys.key)).outerjoin(UserModel, and_(UserDictKeys.user_id == UserModel.id, UserModel.active == True)).group_by(UserDictKeys.user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno,UserModel.email).order_by(UserDictKeys.indexno).with_entities(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserModel.email)
+            interview_query = db.session.query(UserDict).join(subq, and_(UserDict.indexno == subq.c.indexno, UserDict.key == subq.c.key, UserDict.filename == subq.c.filename)).outerjoin(UserDictKeys, and_(UserDict.filename == UserDictKeys.filename, UserDict.key == UserDictKeys.key)).outerjoin(UserModel, and_(UserDictKeys.user_id == UserModel.id, UserModel.active == True)).group_by(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserDictKeys.indexno, UserModel.email).order_by(UserDictKeys.indexno).with_entities(UserDictKeys.user_id, UserDictKeys.temp_user_id, UserDict.filename, UserDict.key, UserDict.dictionary, UserDict.encrypted, UserModel.email)
     #logmessage(str(interview_query))
     interviews = list()
     for interview_info in interview_query:

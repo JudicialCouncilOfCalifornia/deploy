@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.2.77] - 2018-07-13
+### Fixed
+- The `post` HTML was missing on signature pages.
+- The `value()` function was not working properly.
+
+## [0.2.76] - 2018-07-11
+### Fixed
+- Possible fix for "group by" SQL error in `user_interviews()`.
+
 ## [0.2.75] - 2018-07-11
 ### Added
 - The `step` option for `datatype: number` and `datatype: currency`.
