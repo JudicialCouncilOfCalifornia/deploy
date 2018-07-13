@@ -167,6 +167,10 @@ resource "aws_ecs_task_definition" "da_task" {
     },
     "environment": [
       {
+        "name": "EC2",
+        "value": "true"
+      },
+      {
         "name": "S3ENABLE",
         "value": "true"
       },
