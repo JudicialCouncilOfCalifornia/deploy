@@ -263,6 +263,5 @@ resource "aws_ecs_service" "da_service" {
   network_configuration {
     subnets = ["${aws_subnet.da_subnet_private.id}"]
     security_groups = ["${aws_security_group.da_security.id}"]
-    assign_public_ip = true
   }
 }
