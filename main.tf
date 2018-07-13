@@ -76,9 +76,14 @@ resource "aws_iam_role" "da_iam" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "da_attachment" {
+resource "aws_iam_role_policy_attachment" "da_attachment_ecs" {
   role = "${aws_iam_role.da_iam.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "da_attachment_logs" {
+  role = "${aws_iam_role.da_iam.name}"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
 
 data "aws_availability_zones" "da_az" {}
@@ -133,32 +138,6 @@ resource "aws_security_group" "da_security" {
     to_port = 0
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_network_acl" "da_acl" {
-  vpc_id = "${aws_vpc.da_vpc.id}"
-
-  egress {
-    protocol = "-1"
-    rule_no = 200
-    action = "allow"
-    from_port = 0
-    to_port = 0
-    cidr_block = "0.0.0.0/0"
-  }
-
-  ingress {
-    protocol = "-1"
-    rule_no = 200
-    action = "allow"
-    from_port = 0
-    to_port = 0
-    cidr_block = "0.0.0.0/0"
-  }
-
-  tags {
-    Name = "${var.NAME}"
   }
 }
 
