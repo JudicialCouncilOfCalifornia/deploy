@@ -126,47 +126,6 @@ resource "aws_route_table_association" "da_assoc_public" {
   route_table_id = "${aws_route_table.da_table_public.id}"
 }
 
-resource "aws_eip" "da_eip" {
-  vpc = true
-}
-
-resource "aws_nat_gateway" "da_nat" {
-  allocation_id = "${aws_eip.da_eip.id}"
-  subnet_id = "${aws_subnet.da_subnet_public.id}"
-  
-  tags {
-    Name = "${var.NAME}"
-  }
-}
-
-resource "aws_subnet" "da_subnet_private" {
-  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, 1)}"
-  vpc_id = "${aws_vpc.da_vpc.id}"
-
-  tags {
-    Name = "${var.NAME}"
-  }
-}
-
-resource "aws_route_table" "da_table_private" {
-  vpc_id = "${aws_vpc.da_vpc.id}"
-
-  tags {
-    Name = "${var.NAME}"
-  }
-}
-
-resource "aws_route_table_association" "da_assoc_private" {
-  subnet_id = "${aws_subnet.da_subnet_private.id}"
-  route_table_id = "${aws_route_table.da_table_private.id}"
-}
-
-resource "aws_route" "da_route_nat" {
-  route_table_id  = "${aws_route_table.da_table_private.id}"
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = "${aws_nat_gateway.da_nat.id}"
-}
-
 resource "aws_security_group" "da_security" {
   name = "${var.NAME}"
   vpc_id = "${aws_vpc.da_vpc.id}"
@@ -261,7 +220,7 @@ resource "aws_ecs_service" "da_service" {
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
   network_configuration {
-    subnets = ["${aws_subnet.da_subnet_private.id}"]
+    subnets = ["${aws_subnet.da_subnet_public.id}"]
     security_groups = ["${aws_security_group.da_security.id}"]
   }
 }
