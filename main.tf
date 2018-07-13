@@ -81,6 +81,8 @@ resource "aws_iam_role_policy_attachment" "da_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+data "aws_availability_zones" "da_azs" {}
+
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
 
@@ -90,7 +92,8 @@ resource "aws_vpc" "da_vpc" {
 }
 
 resource "aws_subnet" "da_subnet_public" {
-  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, 0)}"
+  count = "${length(data.aws_availability_zones.da_azs.names)}"
+  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count.index)}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
 
@@ -122,7 +125,8 @@ resource "aws_route" "da_route_iw" {
 }
 
 resource "aws_route_table_association" "da_assoc_public" {
-  subnet_id = "${aws_subnet.da_subnet_public.id}"
+  count = "${length(data.aws_availability_zones.da_azs.names)}"
+  subnet_id = "${element(aws_subnet.da_subnet_public.*.id, count.index)}"
   route_table_id = "${aws_route_table.da_table_public.id}"
 }
 
@@ -209,18 +213,18 @@ DEFINITION
   family = "${var.NAME}"
   memory = 1024
   network_mode = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
 }
 
 resource "aws_ecs_service" "da_service" {
   cluster = "${aws_ecs_cluster.da_cluster.id}"
   desired_count = 1
-  launch_type = "FARGATE"
+  launch_type = "EC2"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
   network_configuration {
-    subnets = ["${aws_subnet.da_subnet_public.id}"]
+    subnets = ["${aws_subnet.da_subnet_public.*.id}"]
     security_groups = ["${aws_security_group.da_security.id}"]
   }
 }
