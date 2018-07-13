@@ -81,8 +81,6 @@ resource "aws_iam_role_policy_attachment" "da_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-data "aws_availability_zones" "da_az" {}
-
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
 
@@ -91,10 +89,8 @@ resource "aws_vpc" "da_vpc" {
   }
 }
 
-resource "aws_subnet" "da_subnet" {
-  count = "${length(data.aws_availability_zones.da_az.names)}"
-  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count.index)}"
-  availability_zone = "${data.aws_availability_zones.da_az.names[count.index]}"
+resource "aws_subnet" "da_subnet_public" {
+  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, 0)}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
 
@@ -103,7 +99,7 @@ resource "aws_subnet" "da_subnet" {
   }
 }
 
-resource "aws_internet_gateway" "da_gateway" {
+resource "aws_internet_gateway" "da_internet" {
   vpc_id = "${aws_vpc.da_vpc.id}"
 
   tags {
@@ -111,10 +107,56 @@ resource "aws_internet_gateway" "da_gateway" {
   }
 }
 
-resource "aws_route" "da_route" {
+resource "aws_route" "da_route_iw" {
   route_table_id = "${aws_vpc.da_vpc.main_route_table_id}"
-  gateway_id = "${aws_internet_gateway.da_gateway.id}"
+  gateway_id = "${aws_internet_gateway.da_internet.id}"
   destination_cidr_block = "0.0.0.0/0"
+}
+
+resource "aws_route_table_association" "da_assoc_public" {
+  subnet_id = "${aws_subnet.da_subnet_public.id}"
+  route_table_id = "${aws_route.da_route_iw.id}"
+}
+
+resource "aws_eip" "da_eip" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "da_nat" {
+  allocation_id = "${aws_eip.da_eip.id}"
+  subnet_id = "${aws_subnet.da_subnet_public.id}"
+  
+  tags {
+    Name = "${var.NAME}"
+  }
+}
+
+resource "aws_subnet" "da_subnet_private" {
+  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, 1)}"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  tags {
+    Name = "${var.NAME}"
+  }
+}
+
+resource "aws_route_table" "da_table" {
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  tags {
+    Name = "${var.NAME}"
+  }
+}
+
+resource "aws_route_table_association" "da_assoc_private" {
+  subnet_id = "${aws_subnet.da_subnet_private.id}"
+  route_table_id = "${aws_route_table.da_table.id}"
+}
+
+resource "aws_route" "da_route_nat" {
+  route_table_id  = "${aws_route_table.da_table.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = "${aws_nat_gateway.da_nat.id}"
 }
 
 resource "aws_security_group" "da_security" {
@@ -211,7 +253,7 @@ resource "aws_ecs_service" "da_service" {
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
   network_configuration {
-    subnets = ["${aws_subnet.da_subnet.*.id}"]
+    subnets = ["${aws_subnet.da_subnet_private.id}"]
     security_groups = ["${aws_security_group.da_security.id}"]
     assign_public_ip = true
   }
