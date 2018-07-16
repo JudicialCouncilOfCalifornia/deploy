@@ -99,6 +99,7 @@ resource "aws_subnet" "da_subnet_public" {
   cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count.index)}"
   vpc_id = "${aws_vpc.da_vpc.id}"
   map_public_ip_on_launch = true
+  region = "data.aws_availability_zones.da_azs.names[count.index]"
 
   tags {
     Name = "${var.NAME}"
@@ -150,6 +151,7 @@ resource "aws_subnet" "da_subnet_private" {
   count = "${length(data.aws_availability_zones.da_azs.names)}"
   cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count.index + length(data.aws_availability_zones.da_azs.names))}"
   vpc_id = "${aws_vpc.da_vpc.id}"
+  region = "data.aws_availability_zones.da_azs.names[count.index]"
 
   tags {
     Name = "${var.NAME}"
