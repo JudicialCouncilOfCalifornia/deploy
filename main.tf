@@ -239,6 +239,18 @@ resource "aws_alb_listener" "da_listener" {
   }
 }
 
+resource "aws_route53_record" "da_entry" {
+  zone_id = "${aws_route53_zone.da_zone.zone_id}"
+  name = "${var.DOMAIN}."
+  type = "A"
+
+  alias {
+    name = "${aws_alb.da_alb.dns_name}"
+    zone_id = "${aws_alb.da_alb.zone_id}"
+    evaluate_target_health = true
+  }
+}
+
 resource "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
