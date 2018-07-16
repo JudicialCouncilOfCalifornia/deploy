@@ -81,7 +81,9 @@ resource "aws_iam_role_policy_attachment" "da_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-data "aws_availability_zones" "da_azs" {}
+data "aws_availability_zones" "da_azs" {
+  state = "available"
+}
 
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
