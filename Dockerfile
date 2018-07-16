@@ -1,5 +1,6 @@
 FROM debian:stretch
 ENV DEBIAN_FRONTEND="noninteractive"
+USER root
 RUN apt-get -q -y update
 RUN apt-get -q -y install curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
