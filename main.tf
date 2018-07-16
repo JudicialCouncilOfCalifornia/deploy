@@ -314,10 +314,10 @@ resource "aws_ecs_task_definition" "da_task" {
 ]
 DEFINITION
 
-  cpu = 1024
+  cpu = 2048
   execution_role_arn = "${aws_iam_role.da_iam.arn}"
   family = "${var.NAME}"
-  memory = 2048
+  memory = 4096
   network_mode = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 }
