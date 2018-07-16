@@ -218,7 +218,7 @@ resource "aws_security_group" "da_security_private" {
 
 resource "aws_alb" "da_alb" {
   name = "${var.NAME}"
-  subnets = ["${aws_subnet.da_subnet_public.*.id}"]
+  subnets = ["${aws_subnet.da_subnet_public.0.id}"]
   security_groups = ["${aws_security_group.da_security_public.id}"]
 }
 
