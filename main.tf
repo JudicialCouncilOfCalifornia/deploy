@@ -131,8 +131,8 @@ resource "aws_route_table_association" "da_assoc_public" {
   route_table_id = "${aws_route_table.da_table_public.id}"
 }
 
-resource "aws_security_group" "da_security" {
-  name = "${var.NAME}"
+resource "aws_security_group" "da_security_public" {
+  name = "${var.NAME}-public"
   vpc_id = "${aws_vpc.da_vpc.id}"
 
   ingress {
@@ -147,6 +147,50 @@ resource "aws_security_group" "da_security" {
     to_port = 0
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "da_security_private" {
+  name = "${var.NAME}-private"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  ingress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    security_groups = ["${aws_security_group.da_security_public.id}"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_alb" "da_alb" {
+  name = "${var.NAME}"
+  subnets = ["${aws_subnet.da_subnet_public.*.id}"]
+  security_groups = ["${aws_security_group.da_security_public.id}"]
+}
+
+resource "aws_alb_target_group" "da_target" {
+  name = "${var.NAME}"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+  target_type = "ip"
+}
+
+resource "aws_alb_listener" "da_listener" {
+  load_balancer_arn = "${aws_alb.da_alb.id}"
+  port = "80"
+  protocol = "HTTP"
+
+  default_action {
+    target_group_arn = "${aws_alb_target_group.da_alb.id}"
+    type = "forward"
   }
 }
 
@@ -225,8 +269,14 @@ resource "aws_ecs_service" "da_service" {
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
 
   network_configuration {
-    subnets = ["${aws_subnet.da_subnet_public.*.id}"]
-    security_groups = ["${aws_security_group.da_security.id}"]
+    subnets = ["${aws_subnet.da_subnet_private.*.id}"]
+    security_groups = ["${aws_security_group_private.da_security.id}"]
     assign_public_ip = true
+  }
+
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.da_target.id}"
+    container_name   = "${var.NAME}"
+    container_port   = "80"
   }
 }
