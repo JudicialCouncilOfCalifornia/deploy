@@ -131,6 +131,51 @@ resource "aws_route_table_association" "da_assoc_public" {
   route_table_id = "${aws_route_table.da_table_public.id}"
 }
 
+resource "aws_eip" "da_eip" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "da_nat" {
+  allocation_id = "${aws_eip.da_eip.id}"
+  subnet_id = "${aws_subnet.da_subnet_public.0.id}"
+  
+  tags {
+    Name = "${var.NAME}"
+  }
+}
+
+resource "aws_subnet" "da_subnet_private" {
+  count = "${length(data.aws_availability_zones.da_azs.names)}"
+  cidr_block = "${cidrsubnet(aws_vpc.da_vpc.cidr_block, 8, count.index + length(data.aws_availability_zones.da_azs.names))}"
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  tags {
+    Name = "${var.NAME}"
+    Type = "Private"
+  }
+}
+
+resource "aws_route_table" "da_table_private" {
+  vpc_id = "${aws_vpc.da_vpc.id}"
+
+  tags {
+    Name = "${var.NAME}"
+    Type = "Private"
+  }
+}
+
+resource "aws_route" "da_route_nat" {
+  route_table_id  = "${aws_route_table.da_table_private.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = "${aws_nat_gateway.da_nat.id}"
+}
+
+resource "aws_route_table_association" "da_assoc_private" {
+  count = "${length(data.aws_availability_zones.da_azs.names)}"
+  subnet_id = "${element(aws_subnet.da_subnet_private.*.id, count.index)}"
+  route_table_id = "${aws_route_table.da_table_private.id}"
+}
+
 resource "aws_security_group" "da_security_public" {
   name = "${var.NAME}-public"
   vpc_id = "${aws_vpc.da_vpc.id}"
@@ -189,7 +234,7 @@ resource "aws_alb_listener" "da_listener" {
   protocol = "HTTP"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.da_alb.id}"
+    target_group_arn = "${aws_alb_target_group.da_target.id}"
     type = "forward"
   }
 }
@@ -270,7 +315,7 @@ resource "aws_ecs_service" "da_service" {
 
   network_configuration {
     subnets = ["${aws_subnet.da_subnet_private.*.id}"]
-    security_groups = ["${aws_security_group_private.da_security.id}"]
+    security_groups = ["${aws_security_group.da_security_private.id}"]
     assign_public_ip = true
   }
 
