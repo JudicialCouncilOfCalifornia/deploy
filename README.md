@@ -2,7 +2,7 @@
 
 `JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
 
-[The easiest thread to pull on](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/clean/.travis.yml).
+[The easiest thread to pull on](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml).
 
 # Past
 
