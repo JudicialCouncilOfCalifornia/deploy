@@ -1,6 +1,7 @@
 FROM debian:stretch
-ENV DEBIAN_FRONTEND="noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive" RUNLEVEL="1"
 USER root
+RUN sed -i 's/101/0/g' /usr/sbin/policy-rc.d
 RUN apt-get -q -y update
 RUN apt-get -q -y install curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
