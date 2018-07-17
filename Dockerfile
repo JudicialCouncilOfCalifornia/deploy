@@ -67,5 +67,6 @@ RUN a2enmod proxy_http
 RUN a2enmod proxy_wstunnel
 RUN a2enmod headers
 RUN a2enconf docassemble
+RUN service apache2 restart
 EXPOSE 80 443 9001 514 25 465 8080 8081 5432 6379 4369 5671 5672 25672
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
