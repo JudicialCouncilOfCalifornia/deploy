@@ -1,20 +1,24 @@
 # TL;DR
 
-`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
+`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of the [Docassemble Toolkit](https://community.lawyer/docassemble).
 
-[The easiest thread to pull on](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml).
+# Where do I start to understand?
 
-# Past
+[Here](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml)
+
+# Proposal
+
+## Past
 
 `jhpyle/docassemble` has code for multiple packages, deployment, and testing tools; is somewhat confusing due to its scope.
 
-# Present
+## Present
 
 `JudicialCouncilOfCalifornia/docassemble.deploy` uses Travis CI, AWS, and Terraform to simplify the deployment and test process for Docassemble.
 
 `JudicialCouncilOfCalifornia/docassemble.deploy` does not include the core docassemble python packages, and installs the latest versions from pypi.
 
-# Future
+## Future
 
 I think the core docassemble repository should be broken apart into component parts and moved to a new org account (named Docassemble):
 
