@@ -1,6 +1,27 @@
-See the [docassemble web site](https://docassemble.org) for
-a description of **docassemble** and installation instructions.
+# TL;DR
 
-To get help with using **docassemble**, join the 
-[docassemble mailing list](https://mail.python.org/mm3/mailman3/lists/docassemble.python.org/)
-and/or the [docassemble Slack group](https://join.slack.com/t/docassemble/shared_invite/enQtMjQ0Njc1NDk0NjU2LTAzYzY5NWExMzUxNTNhNjUyZjRkMDg0NGE2Yjc2YjI0OGNlMTcwNjhjYzRhMjljZWU0MTI2N2U0MTFlM2ZjNzg).
+`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of the [Docassemble Toolkit](https://community.lawyer/docassemble).
+
+# [Where do I start?](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml)
+
+# Proposal
+
+## Past
+
+`jhpyle/docassemble` has code for multiple packages, deployment, and testing tools; is somewhat confusing due to its scope.
+
+## Present
+
+`JudicialCouncilOfCalifornia/docassemble.deploy` uses Travis CI, AWS, and Terraform to simplify the deployment and test process for Docassemble.
+
+`JudicialCouncilOfCalifornia/docassemble.deploy` does not include the core docassemble python packages, and installs the latest versions from pypi.
+
+## Future
+
+I think the core docassemble repository should be broken apart into component parts and moved to a new org account (named Docassemble):
+
+1. `jhpyle/docassemble:docassemble` -> `Docassemble/namespace`
+2. `jhpyle/docassemble:docassemble_base` -> `Docassemble/base`
+3. `jhpyle/docassemble:docassemble_demo` -> `Docassemble/demo`
+4. `jhpyle/docassemble:docassemble_webapp` -> `Docassemble/webapp`
+5. `jhpyle/docassemble:<EVERYTHING ELSE>` -> `Docassemble/deploy`

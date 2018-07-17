@@ -18,7 +18,6 @@ RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
 RUN easy_install pip
 RUN pip install --upgrade virtualenv pip 3to2 pdfx
 COPY . /tmp/docassemble/
-RUN cp /tmp/docassemble/docassemble_webapp/docassemble.wsgi /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/*.sh /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/VERSION /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/pip.conf /usr/share/docassemble/local/
@@ -45,7 +44,7 @@ RUN cp /tmp/docassemble/Docker/config/exim4-acl /etc/exim4/conf.d/acl/29_docasse
 RUN cp /tmp/docassemble/Docker/config/exim4-update /etc/exim4/update-exim4.conf.conf
 RUN update-exim4.conf
 RUN chown www-data.www-data /usr/share/docassemble/config
-RUN chown www-data.www-data /usr/share/docassemble/config/config.yml.dist /usr/share/docassemble/webapp/docassemble.wsgi
+RUN chown www-data.www-data /usr/share/docassemble/config/config.yml.dist
 RUN chown -R www-data.www-data /tmp/docassemble /usr/share/docassemble/local /usr/share/docassemble/log /usr/share/docassemble/files
 RUN chmod ogu+r /usr/share/docassemble/config/config.yml.dist
 RUN chmod 755 /etc/ssl/docassemble
