@@ -264,6 +264,7 @@ resource "aws_route53_record" "da_entry" {
   alias {
     name = "${aws_lb.da_lb.dns_name}"
     zone_id = "${aws_lb.da_lb.zone_id}"
+    evaluate_target_health = true
   }
 }
 
