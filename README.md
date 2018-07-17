@@ -2,7 +2,7 @@
 
 `JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of the [Docassemble Toolkit](https://community.lawyer/docassemble).
 
-# [Where do I start](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml)
+# [Where do I start?](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/master/.travis.yml)
 
 # Proposal
 
