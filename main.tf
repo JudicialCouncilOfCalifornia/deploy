@@ -341,6 +341,7 @@ resource "aws_ecs_service" "da_service" {
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
+  health_check_grace_period_seconds  = 600
 
   network_configuration {
     subnets = ["${aws_subnet.da_subnet_private.*.id}"]
