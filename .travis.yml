@@ -25,11 +25,9 @@ env:
 - START=550 END=600
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
-- pip install awscli
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
 script:
 - docker run -d -p 80:80 $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
-- pip install chromedriver_installer lettuce lettuce_webdriver python-Levenshtein
 - python tests/run.py $START $END
 jobs:
   include:
