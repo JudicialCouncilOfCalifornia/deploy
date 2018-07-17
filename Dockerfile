@@ -50,7 +50,7 @@ RUN chown -R www-data.www-data /tmp/docassemble /usr/share/docassemble/local /us
 RUN chmod ogu+r /usr/share/docassemble/config/config.yml.dist
 RUN chmod 755 /etc/ssl/docassemble
 USER www-data
-RUN cd /tmp && virtualenv /usr/share/docassemble/local && . /usr/share/docassemble/local/bin/activate && pip install ndg-httpsclient 'git+https://github.com/nekstrom/pyrtf-ng#egg=pyrtf-ng' /tmp/docassemble/docassemble /tmp/docassemble/docassemble_base /tmp/docassemble/docassemble_demo /tmp/docassemble/docassemble_webapp
+RUN cd /tmp && virtualenv /usr/share/docassemble/local && . /usr/share/docassemble/local/bin/activate && pip install ndg-httpsclient 'git+https://github.com/nekstrom/pyrtf-ng#egg=pyrtf-ng' docassemble docassemble.base docassemble.demo docassemble.webapp docassemble.helloworld
 USER root
 RUN rm -rf /tmp/docassemble
 RUN sed -i -e 's/^\(daemonize\s*\)yes\s*$/\1no/g' -e 's/^bind 127.0.0.1/bind 0.0.0.0/g' /etc/redis/redis.conf
