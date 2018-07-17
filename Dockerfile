@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stable
 ENV DEBIAN_FRONTEND="noninteractive" RUNLEVEL="1"
 USER root
 RUN sed -i 's/101/0/g' /usr/sbin/policy-rc.d
