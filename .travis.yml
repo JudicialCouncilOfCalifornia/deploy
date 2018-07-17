@@ -1,3 +1,4 @@
+sudo: required
 language: python
 services:
 - docker
@@ -33,7 +34,7 @@ jobs:
   include:
   - stage: build
     script:
-    - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
+    - sudo docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
     - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
     - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
   - stage: terraform
