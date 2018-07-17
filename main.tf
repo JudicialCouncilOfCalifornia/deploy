@@ -222,6 +222,10 @@ resource "aws_lb" "da_lb" {
   name = "${var.NAME}"
   subnets = ["${aws_subnet.da_subnet_public.*.id}"]
   security_groups = ["${aws_security_group.da_security_public.id}"]
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_lb_target_group" "da_target" {
@@ -230,6 +234,10 @@ resource "aws_lb_target_group" "da_target" {
   protocol = "HTTP"
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
+  
+  tags {
+    Name = "${var.NAME}"
+  }
 }
 
 resource "aws_lb_listener" "da_listener" {
