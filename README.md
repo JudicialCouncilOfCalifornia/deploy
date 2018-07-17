@@ -20,4 +20,4 @@ I think the core docassemble repository should be broken apart into component pa
 
 # Takeaway
 
-I'm positioning `JudicialCouncilOfCalifornia/docassemble.deploy` as an example of what I think `Docassemble/deploy` (the most meta package) should be: an open source version of Docassemble Toolkit.
+`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
