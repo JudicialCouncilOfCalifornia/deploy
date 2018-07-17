@@ -18,6 +18,6 @@ I think the core docassemble repository should be broken apart into component pa
 4. `jhpyle/docassemble:docassemble_webapp` -> `Docassemble/webapp`
 5. `jhpyle/docassemble:<EVERYTHING ELSE>` -> `Docassemble/deploy`
 
-# Takeaway
+# TL;DR
 
 `JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
