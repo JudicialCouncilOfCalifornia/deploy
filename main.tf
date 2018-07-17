@@ -237,7 +237,7 @@ resource "aws_lb_target_group" "da_target" {
   
   health_check {
     path = "/"
-    matcher = "100-599"
+    matcher = "200-499"
   }
   
   tags {
