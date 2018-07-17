@@ -264,7 +264,6 @@ resource "aws_route53_record" "da_entry" {
   alias {
     name = "${aws_lb.da_lb.dns_name}"
     zone_id = "${aws_lb.da_lb.zone_id}"
-    evaluate_target_health = true
   }
 }
 
@@ -341,7 +340,6 @@ resource "aws_ecs_service" "da_service" {
   launch_type = "FARGATE"
   name = "${var.NAME}"
   task_definition = "${aws_ecs_task_definition.da_task.arn}"
-  health_check_grace_period_seconds  = 7200
 
   network_configuration {
     subnets = ["${aws_subnet.da_subnet_private.*.id}"]
