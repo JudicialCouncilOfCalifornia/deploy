@@ -218,13 +218,13 @@ resource "aws_security_group" "da_security_private" {
   }
 }
 
-resource "aws_alb" "da_alb" {
+resource "aws_lb" "da_lb" {
   name = "${var.NAME}"
   subnets = ["${aws_subnet.da_subnet_public.*.id}"]
   security_groups = ["${aws_security_group.da_security_public.id}"]
 }
 
-resource "aws_alb_target_group" "da_target" {
+resource "aws_lb_target_group" "da_target" {
   name = "${var.NAME}"
   port = 80
   protocol = "HTTP"
@@ -232,13 +232,13 @@ resource "aws_alb_target_group" "da_target" {
   target_type = "ip"
 }
 
-resource "aws_alb_listener" "da_listener" {
-  load_balancer_arn = "${aws_alb.da_alb.id}"
+resource "aws_lb_listener" "da_listener" {
+  load_balancer_arn = "${aws_lb.da_lb.id}"
   port = "80"
   protocol = "HTTP"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.da_target.id}"
+    target_group_arn = "${aws_lb_target_group.da_target.id}"
     type = "forward"
   }
 }
@@ -249,8 +249,8 @@ resource "aws_route53_record" "da_entry" {
   type = "A"
 
   alias {
-    name = "${aws_alb.da_alb.dns_name}"
-    zone_id = "${aws_alb.da_alb.zone_id}"
+    name = "${aws_lb.da_lb.dns_name}"
+    zone_id = "${aws_lb.da_lb.zone_id}"
     evaluate_target_health = true
   }
 }
@@ -336,7 +336,7 @@ resource "aws_ecs_service" "da_service" {
   }
 
   load_balancer {
-    target_group_arn = "${aws_alb_target_group.da_target.id}"
+    target_group_arn = "${aws_lb_target_group.da_target.id}"
     container_name   = "${var.NAME}"
     container_port   = "80"
   }
