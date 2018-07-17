@@ -1,6 +1,12 @@
+# TL;DR
+
+`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
+
+[The easiest thread to pull on](https://github.com/JudicialCouncilOfCalifornia/docassemble.deploy/blob/clean/.travis.yml).
+
 # Past
 
-`jhpyle/docassemble` has code for multiple packages, deployment, and testing tools; is quite confusing.
+`jhpyle/docassemble` has code for multiple packages, deployment, and testing tools; is somewhat confusing due to its scope.
 
 # Present
 
@@ -17,7 +23,3 @@ I think the core docassemble repository should be broken apart into component pa
 3. `jhpyle/docassemble:docassemble_demo` -> `Docassemble/demo`
 4. `jhpyle/docassemble:docassemble_webapp` -> `Docassemble/webapp`
 5. `jhpyle/docassemble:<EVERYTHING ELSE>` -> `Docassemble/deploy`
-
-# TL;DR
-
-`JudicialCouncilOfCalifornia/docassemble.deploy` is intended as an open source version of Docassemble Toolkit.
