@@ -303,6 +303,10 @@ resource "aws_ecs_task_definition" "da_task" {
         "value": "true"
       },
       {
+        "name": "EC2",
+        "value": "false"
+      },
+      {
         "name": "S3BUCKET",
         "value": "${var.NAME}"
       },
