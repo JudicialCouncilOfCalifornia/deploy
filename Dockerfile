@@ -18,7 +18,6 @@ RUN echo "listen_addresses = '*'" >> /etc/postgresql/9.6/main/postgresql.conf
 RUN easy_install pip
 RUN pip install --upgrade virtualenv pip 3to2 pdfx
 COPY . /tmp/docassemble/
-RUN cp /tmp/docassemble/docassemble_webapp/docassemble.wsgi /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/*.sh /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/VERSION /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/pip.conf /usr/share/docassemble/local/
