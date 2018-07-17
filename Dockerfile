@@ -1,5 +1,5 @@
 FROM debian:stable
-ENV DEBIAN_FRONTEND="noninteractive" RUNLEVEL="1"
+ENV DEBIAN_FRONTEND="noninteractive" CONTAINERROLE="all" LOCALE="en_US.UTF-8 UTF-8" TIMEZONE="America/New_York" EC2="" S3ENABLE="" S3BUCKET="" S3ACCESSKEY="" S3SECRETACCESSKEY="" DAHOSTNAME="" USEHTTPS="" USELETSENCRYPT="" LETSENCRYPTEMAIL="" DBHOST="" LOGSERVER="" REDIS="" RABBITMQ=""
 USER root
 RUN sed -i 's/101/0/g' /usr/sbin/policy-rc.d
 RUN apt-get -q -y update
@@ -58,7 +58,14 @@ RUN sed -i -e 's/#APACHE_ULIMIT_MAX_FILES/APACHE_ULIMIT_MAX_FILES/' -e 's/ulimit
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 RUN locale-gen
 RUN update-locale LANG=en_US.UTF-8
-RUN a2dismod ssl; a2enmod wsgi; a2enmod rewrite; a2enmod xsendfile; a2enmod proxy; a2enmod proxy_http; a2enmod proxy_wstunnel; a2enmod headers; a2enconf docassemble
+RUN a2dismod ssl
+RUN a2enmod wsgi
+RUN a2enmod rewrite
+RUN a2enmod xsendfile
+RUN a2enmod proxy
+RUN a2enmod proxy_http
+RUN a2enmod proxy_wstunnel
+RUN a2enmod headers
+RUN a2enconf docassemble
 EXPOSE 80 443 9001 514 25 465 8080 8081 5432 6379 4369 5671 5672 25672
-ENV CONTAINERROLE="all" LOCALE="en_US.UTF-8 UTF-8" TIMEZONE="America/New_York" EC2="" S3ENABLE="" S3BUCKET="" S3ACCESSKEY="" S3SECRETACCESSKEY="" DAHOSTNAME="" USEHTTPS="" USELETSENCRYPT="" LETSENCRYPTEMAIL="" DBHOST="" LOGSERVER="" REDIS="" RABBITMQ=""
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
