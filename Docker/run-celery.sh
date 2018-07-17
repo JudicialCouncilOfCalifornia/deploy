@@ -5,4 +5,4 @@ source "${DA_PYTHON:-${DA_ROOT}/local}/bin/activate"
 
 export HOME=/var/www
 
-exec celery worker -A docassemble.webapp.worker --loglevel=INFO
+exec celery worker -A docassemble.webapp.worker --loglevel=DEBUG
