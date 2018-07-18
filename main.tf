@@ -282,8 +282,8 @@ resource "aws_ecs_task_definition" "da_task" {
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 80,
-        "hostPort": 80
+        "containerPort": 443,
+        "hostPort": 443
       }
     ],
     "logConfiguration": {
@@ -349,6 +349,6 @@ resource "aws_ecs_service" "da_service" {
   load_balancer {
     target_group_arn = "${aws_lb_target_group.da_target.id}"
     container_name   = "${var.NAME}"
-    container_port   = "80"
+    container_port   = "443"
   }
 }
