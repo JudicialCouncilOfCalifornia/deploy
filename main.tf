@@ -230,8 +230,8 @@ resource "aws_lb" "da_lb" {
 
 resource "aws_lb_target_group" "da_target" {
   name = "${var.NAME}"
-  port = 443
-  protocol = "HTTPS"
+  port = 80
+  protocol = "HTTP"
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
   
@@ -282,8 +282,8 @@ resource "aws_ecs_task_definition" "da_task" {
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 443,
-        "hostPort": 443
+        "containerPort": 80,
+        "hostPort": 80
       }
     ],
     "logConfiguration": {
@@ -295,10 +295,6 @@ resource "aws_ecs_task_definition" "da_task" {
       }
     },
     "environment": [
-      {
-        "name": "USEHTTPS",
-        "value": "true"
-      },
       {
         "name": "S3ENABLE",
         "value": "true"
@@ -353,6 +349,6 @@ resource "aws_ecs_service" "da_service" {
   load_balancer {
     target_group_arn = "${aws_lb_target_group.da_target.id}"
     container_name   = "${var.NAME}"
-    container_port   = "443"
+    container_port   = "80"
   }
 }
