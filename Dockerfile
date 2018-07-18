@@ -47,7 +47,7 @@ RUN update-exim4.conf
 RUN chown www-data.www-data /usr/share/docassemble/config
 RUN chown www-data.www-data /usr/share/docassemble/config/config.yml.dist
 RUN chown -R www-data.www-data /tmp/docassemble /usr/share/docassemble/local /usr/share/docassemble/log /usr/share/docassemble/files
-RUN chmod ogu+r /usr/share/docassemble/config/config.yml.dist /usr/share/docassemble/webapp/docassemble.wsgi
+RUN chmod a+rwx /usr/share/docassemble/config/config.yml.dist /usr/share/docassemble/webapp/docassemble.wsgi
 RUN chmod 755 /etc/ssl/docassemble
 USER www-data
 RUN cd /tmp && virtualenv /usr/share/docassemble/local && . /usr/share/docassemble/local/bin/activate && pip install ndg-httpsclient 'git+https://github.com/nekstrom/pyrtf-ng#egg=pyrtf-ng' docassemble docassemble.base docassemble.demo docassemble.webapp docassemble.helloworld
