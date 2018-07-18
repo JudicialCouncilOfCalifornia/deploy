@@ -235,11 +235,6 @@ resource "aws_lb_target_group" "da_target" {
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
   
-  health_check {
-    path = "/"
-    matcher = "200-499"
-  }
-  
   tags {
     Name = "${var.NAME}"
   }
