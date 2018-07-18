@@ -230,8 +230,8 @@ resource "aws_lb" "da_lb" {
 
 resource "aws_lb_target_group" "da_target" {
   name = "${var.NAME}"
-  port = 80
-  protocol = "HTTP"
+  port = 443
+  protocol = "HTTPS"
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
   
@@ -242,8 +242,10 @@ resource "aws_lb_target_group" "da_target" {
 
 resource "aws_lb_listener" "da_listener" {
   load_balancer_arn = "${aws_lb.da_lb.id}"
-  port = "80"
-  protocol = "HTTP"
+  port = 443
+  protocol = "HTTPS"
+  ssl_policy = "ELBSecurityPolicy-2016-08"
+  certificate_arn = "${aws_acm_certificate.da_certificate.arn}"
 
   default_action {
     target_group_arn = "${aws_lb_target_group.da_target.id}"
