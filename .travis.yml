@@ -3,7 +3,7 @@ services:
 - docker
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
-- eval $(aws ecr get-login --no-include-email --region us-east-1)
+- eval $(aws ecr get-login --no-include-email)
 jobs:
   include:
   - stage: build
