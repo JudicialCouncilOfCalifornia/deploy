@@ -20,8 +20,9 @@
 
 I think the core docassemble repository should be broken apart into component parts and moved to a new org account (named Docassemble):
 
-1. `jhpyle/docassemble:docassemble` -> `Docassemble/namespace`
+1. `jhpyle/docassemble:docassemble` -> `Docassemble/namespace` (or removed)
 2. `jhpyle/docassemble:docassemble_base` -> `Docassemble/base`
 3. `jhpyle/docassemble:docassemble_demo` -> `Docassemble/demo`
-4. `jhpyle/docassemble:docassemble_webapp` -> `Docassemble/webapp`
+4. `jhpyle/docassemble:docassemble_webapp` -> `Docassemble/webapp` (or merged)
+4. `jhpyle/docassemble:tests` -> `Docassemble/test` (or merged)
 5. `jhpyle/docassemble:<EVERYTHING ELSE>` -> `Docassemble/deploy`
