@@ -20,6 +20,7 @@ RUN pip install --upgrade virtualenv pip 3to2 pdfx
 COPY . /tmp/docassemble/
 RUN cp /tmp/docassemble/Docker/docassemble.wsgi /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/*.sh /usr/share/docassemble/webapp/
+RUN cp /tmp/docassemble/Docker/VERSION /usr/share/docassemble/webapp/
 RUN cp /tmp/docassemble/Docker/pip.conf /usr/share/docassemble/local/
 RUN cp /tmp/docassemble/Docker/config/* /usr/share/docassemble/config/
 RUN cp /tmp/docassemble/Docker/cgi-bin/index.sh /usr/lib/cgi-bin/
