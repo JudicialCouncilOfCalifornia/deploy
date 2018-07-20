@@ -1,42 +1,19 @@
 language: python
 services:
 - docker
-addons:
-  chrome: stable
-stages:
-- name: build
-  if: type = push
-- name: terraform
-  if: ( type = push ) AND ( branch = master )
-- name: test
-  if: ( type = push ) AND ( branch != master )
-env:
-- START=000 END=050
-- START=050 END=100
-- START=100 END=150
-- START=150 END=200
-- START=200 END=250
-- START=250 END=300
-- START=300 END=350
-- START=350 END=400
-- START=400 END=450
-- START=450 END=500
-- START=500 END=550
-- START=550 END=600
 before_script:
 - export PATH=$PATH:$HOME/.local/bin
 - eval $(aws ecr get-login --no-include-email --region us-east-1)
-script:
-- docker run -d -p 80:80 $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
-- python tests/run.py $START $END
 jobs:
   include:
   - stage: build
+    if: type = push
     script:
     - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
     - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
     - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
   - stage: terraform
+    if: ( type = push ) AND ( branch = master )
     script:
     - wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
     - unzip terraform_0.11.7_linux_amd64.zip -d .
