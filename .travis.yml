@@ -1,14 +1,13 @@
 language: python
-services:
-- docker
-before_script:
-- export PATH=$PATH:$HOME/.local/bin
-- eval $(aws ecr get-login --no-include-email)
 jobs:
   include:
   - stage: build
     if: type = push
+    services:
+    - docker
     script:
+    - export PATH=$PATH:$HOME/.local/bin
+    - eval $(aws ecr get-login --no-include-email)
     - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
     - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
     - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
