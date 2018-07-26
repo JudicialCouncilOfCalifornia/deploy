@@ -1,0 +1,29 @@
+{
+  "AWS_ACCESS_KEY_ID": {
+    "description": "AWS login id"
+  },
+  "AWS_DEFAULT_REGION": {
+    "description": "AWS login region"
+  },
+  "AWS_SECRET_ACCESS_KEY": {
+    "description": "AWS login secret"
+  },
+  "REPO_HOST": {
+    "description": "Docker repo"
+  },
+  "TF_VAR_DOMAIN": {
+    "description": "Docassemble instance domain"
+  },
+  "TF_VAR_NAME": {
+    "description": "Docassemble instance name"
+  },
+  "TF_VAR_S3_ID": {
+    "description": "Docassemble S3 ID"
+  },
+  "TF_VAR_S3_REGION": {
+    "description": "Docassemble S3 Region"
+  },
+  "TF_VAR_S3_SECRET": {
+    "description": "Docassemble S3 Secret"
+  }
+}
