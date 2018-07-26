@@ -1,0 +1,14 @@
+{
+  "AWS_ACCESS_KEY_ID": {
+    "description": "AWS login id"
+  },
+  "AWS_DEFAULT_REGION": {
+    "description": "AWS login region"
+  },
+  "AWS_SECRET_ACCESS_KEY": {
+    "description": "AWS login secret"
+  },
+  "REPO_HOST": {
+    "description": "Docker repo"
+  }
+}
