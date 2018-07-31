@@ -88,6 +88,7 @@ data "aws_availability_zones" "da_azs" {
 resource "aws_vpc" "da_vpc" {
   cidr_block = "192.168.0.0/16"
   enable_dns_hostnames = true
+  enable_dns_support = true
 
   tags {
     Name = "${var.NAME}"
@@ -230,7 +231,7 @@ resource "aws_lb" "da_lb" {
 
 resource "aws_lb_target_group" "da_target" {
   name = "${var.NAME}"
-  port = 80
+  port = 443
   protocol = "HTTP"
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
@@ -261,7 +262,6 @@ resource "aws_route53_record" "da_entry" {
   alias {
     name = "${aws_lb.da_lb.dns_name}"
     zone_id = "${aws_lb.da_lb.zone_id}"
-    evaluate_target_health = true
   }
 }
 
@@ -282,8 +282,8 @@ resource "aws_ecs_task_definition" "da_task" {
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 80,
-        "hostPort": 80
+        "containerPort": 443,
+        "hostPort": 443
       }
     ],
     "logConfiguration": {
@@ -345,6 +345,6 @@ resource "aws_ecs_service" "da_service" {
   load_balancer {
     target_group_arn = "${aws_lb_target_group.da_target.id}"
     container_name   = "${var.NAME}"
-    container_port   = "80"
+    container_port   = 443
   }
 }
