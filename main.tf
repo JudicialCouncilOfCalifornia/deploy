@@ -232,7 +232,7 @@ resource "aws_lb" "da_lb" {
 resource "aws_lb_target_group" "da_target" {
   name = "${var.NAME}"
   port = 443
-  protocol = "HTTP"
+  protocol = "HTTPS"
   vpc_id = "${aws_vpc.da_vpc.id}"
   target_type = "ip"
   
@@ -295,6 +295,10 @@ resource "aws_ecs_task_definition" "da_task" {
       }
     },
     "environment": [
+      {
+        "name": "USEHTTPS",
+        "value": "true"
+      },
       {
         "name": "S3ENABLE",
         "value": "true"
