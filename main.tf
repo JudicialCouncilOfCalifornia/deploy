@@ -297,10 +297,6 @@ resource "aws_ecs_task_definition" "da_task" {
     },
     "environment": [
       {
-        "name": "USEHTTPS",
-        "value": "true"
-      },
-      {
         "name": "S3ENABLE",
         "value": "true"
       },
