@@ -265,7 +265,7 @@ resource "aws_route53_record" "da_entry" {
   }
 }
 
-resource "aws_ecr_repository" "da_repository" {
+data "aws_ecr_repository" "da_repository" {
   name = "${var.NAME}"
 }
 
