@@ -45,7 +45,6 @@ resource "aws_route53_zone" "da_zone" {
 }
 
 resource "aws_route53_record" "da_record" {
-
   name = "${aws_acm_certificate.da_certificate.domain_validation_options.0.resource_record_name}"
   records = ["${aws_acm_certificate.da_certificate.domain_validation_options.0.resource_record_value}"]
   ttl = 60
