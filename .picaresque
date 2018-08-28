@@ -8,7 +8,7 @@
   "AWS_SECRET_ACCESS_KEY": {
     "description": "AWS login secret"
   },
-  "REPO_HOST": {
+  "TF_VAR_REPO": {
     "description": "Docker repo"
   },
   "TF_VAR_DOMAIN": {
