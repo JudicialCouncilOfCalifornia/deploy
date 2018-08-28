@@ -1,18 +1,8 @@
 language: python
-services:
-- docker
 before_script:
 - npx picaresque
 jobs:
   include:
-  - stage: build
-    if: type = push
-    script:
-    - export PATH=$PATH:$HOME/.local/bin
-    - eval $(aws ecr get-login --no-include-email)
-    - docker build -t ${TF_VAR_NAME}:$TRAVIS_BRANCH .
-    - docker tag ${TF_VAR_NAME}:$TRAVIS_BRANCH $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
-    - docker push $REPO_HOST/$TF_VAR_NAME:$TRAVIS_BRANCH
   - stage: terraform
     if: ( type = push ) AND ( branch = master )
     script:
