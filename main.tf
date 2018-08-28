@@ -6,6 +6,8 @@ variable "DOMAIN" {}
 
 variable "NAME" {}
 
+variable "REPO" {}
+
 variable "S3_ID" {}
 
 variable "S3_SECRET" {}
@@ -270,10 +272,6 @@ resource "aws_route53_record" "da_entry" {
   }
 }
 
-data "aws_ecr_repository" "da_repository" {
-  name = "${var.NAME}"
-}
-
 resource "aws_ecs_cluster" "da_cluster" {
   name = "${var.NAME}"
 }
@@ -283,7 +281,7 @@ resource "aws_ecs_task_definition" "da_task" {
 [
   {
     "name": "${var.NAME}",
-    "image": "${data.aws_ecr_repository.da_repository.repository_url}:master",
+    "image": "${var.REPO}:latest",
     "essential": true,
     "portMappings": [
       {
