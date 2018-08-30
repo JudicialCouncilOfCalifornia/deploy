@@ -281,7 +281,7 @@ resource "aws_ecs_task_definition" "da_task" {
 [
   {
     "name": "${var.NAME}",
-    "image": "${var.REPO}:v0.2.86",
+    "image": "${var.REPO}:latest",
     "essential": true,
     "portMappings": [
       {
