@@ -6,8 +6,6 @@ variable "DOMAIN" {}
 
 variable "NAME" {}
 
-variable "REPO" {}
-
 variable "S3_ID" {}
 
 variable "S3_SECRET" {}
@@ -281,7 +279,7 @@ resource "aws_ecs_task_definition" "da_task" {
 [
   {
     "name": "${var.NAME}",
-    "image": "${var.REPO}:latest",
+    "image": "jhpyle/docassemble:latest",
     "essential": true,
     "portMappings": [
       {
